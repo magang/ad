@@ -1,0 +1,79 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "com.chanlin.ad"
+        minSdkVersion 19
+        targetSdkVersion 29
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    def qmui_version = '2.0.0-alpha10'
+    def butterknifeVersion = '10.1.0'
+    def annotationVersion = '1.1.0-beta01'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "androidx.annotation:annotation:$annotationVersion"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "com.qmuiteam:qmui:$qmui_version"
+    implementation "com.qmuiteam:arch:$qmui_version"
+    kapt "com.qmuiteam:arch-compiler:$qmui_version" // use annotationProcessor if java
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+//    implementation 'com.alibaba:fastjson:1.1.71.android'  // 注意删除这一行
+    implementation 'cn.leancloud:storage-android:6.5.12'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation 'com.github.Beseting:PhotoBrowse:v1.7.5'
+}
+
+buildscript {
+    repositories {
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        google()
+        jcenter()
+        maven {url "https://oss.sonatype.org/content/groups/public/"}
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72"
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        google()
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/groups/public/"}
+    }
+}

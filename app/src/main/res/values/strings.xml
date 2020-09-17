@@ -1,0 +1,259 @@
+<resources>
+    <string name="app_name">Ad</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+
+    <!-- 关于界面 -->
+    <string name="about_title">关于</string>
+    <string name="about_item_homepage">访问官网</string>
+    <string name="about_item_github">GitHub</string>
+    <string name="about_copyright">© %1$s QMUI Team All rights reserved.</string>
+
+    <string name="new_crime">发布消息</string>
+    <string name="delete_crime">删除条目</string>
+    <string name="show_subtitle">显示位置</string>
+    <string name="hide_subtitle">隐藏位置</string>
+    <string name="enable_push">打开通知</string>
+    <string name="disable_push">关闭通知</string>
+    <string name="enable_roam">切换到全国消息</string>
+    <string name="disable_roam">切换到本地消息</string>
+    <string name="crime_report_subject">寻街</string>
+    <string name="send_report">转发给朋友</string>
+    <string name="history_location_label">历史位置</string>
+    <string name="history_location_title">历史位置</string>
+    <string name="delete_location">删除位置</string>
+    <string name="get_location_label">当前位置</string>
+    <string name="location_unavailable">获取当前位置失败</string>
+
+    <string name="new_crime_title_label">消息名称</string>
+    <string name="new_crime_details_label">发布消息...</string>
+    <string name="new_crime_contact_label">手机号码</string>
+    <string name="new_crime_tag_label">标签</string>
+    <string name="tag_helper"></string>
+    <string name="tag_helper_bak"></string>
+    <string name="new_crime_position_label">大致位置</string>
+    <string name="new_crime_position_helper">让附近的用户了解你的大致位置，比如小区或者街道</string>
+    <string name="new_crime_submit_label">发布</string>
+    <string name="new_crime_image_label">图片（可选）</string>
+    <string name="upload_crime_image">上传图片</string>
+    <string name="upload_user_photo">上传头像</string>
+    <string name="buy_mode">买东西</string>
+    <string name="sell_mode">卖东西</string>
+    <string name="enable_nav">分享我的地理位置</string>
+    <string name="loading">正在加载...</string>
+    <string name="blank">没有相关内容</string>
+
+    <string name="shopping_list">购物车</string>
+
+    <string name="vote_score_label">评分（0～10），譬如: 8.6</string>
+    <string name="vote_num_label">投票数量</string>
+    <string name="vote_submit_label">投票</string>
+
+    <string name="register_phone_label">手机号码</string>
+    <string name="register_password_label">密码</string>
+    <string name="register_password_confirm_label">密码确认</string>
+    <string name="register_yzm_label">验证码</string>
+    <string name="register_referrer_label">推荐人手机号码（已注册用户）</string>
+    <string name="register_submit_label">注册</string>
+
+    <string name="reset_phone_label">手机号码</string>
+    <string name="reset_phone_submit_label">下一步</string>
+
+    <string name="old_pwd_label">旧密码</string>
+    <string name="new_pwd_label">新密码</string>
+    <string name="new_pwd_confirm_label">新密码确认</string>
+    <string name="update_pwd_submit_label">提交</string>
+
+    <string name="reset_code_label">验证码（请查收短信）</string>
+    <string name="reset_new_pwd_label">新密码</string>
+    <string name="reset_new_pwd_confirm_label">新密码确认</string>
+    <string name="reset_pwd_submit_label">提交</string>
+
+    <string name="menu_location_label">位置</string>
+    <string name="menu_user_label">用户</string>
+
+    <string name="menu_register_label">注册</string>
+    <string name="menu_login_label">登陆</string>
+    <string name="menu_logout_label">退出</string>
+    <string name="menu_chat_label">私信</string>
+    <string name="menu_update_pwd_label">更改密码</string>
+    <string name="menu_reset_pwd_label">忘记密码</string>
+    <string name="menu_likes_label">收到的赞</string>
+    <string name="menu_comments_label">收到的评论</string>
+    <string name="menu_awards_label">收到的打赏</string>
+    <string name="menu_tag_label">标签</string>
+    <string name="menu_account_label">账户</string>
+    <string name="menu_cash_label">转账</string>
+    <string name="menu_update_label">升级</string>
+    <string name="menu_feedback_label">客服</string>
+    <string name="menu_share_label">分享下载链接</string>
+    <string name="menu_qrcode_label">分享</string>
+    <string name="menu_help_label">帮助</string>
+    <string name="menu_setting_label">设置</string>
+
+    <string name="menu_report_label">投诉</string>
+    <string name="menu_reward_label">打赏</string>
+    <string name="menu_like_label">收藏</string>
+    <string name="menu_cancel_like_label">取消收藏</string>
+    <string name="menu_follow_label">关注</string>
+    <string name="menu_cancel_follow_label">取消关注</string>
+    <string name="menu_online_label">上线</string>
+    <string name="menu_offline_label">下线</string>
+    <string name="menu_edit_label">编辑</string>
+    <string name="menu_refresh_label">刷新</string>
+    <string name="no_name_user">匿名用户</string>
+
+    <string name="phone_verify_code_label">验证码（请查收短信）</string>
+    <string name="phone_verify_number_label">手机号码</string>
+    <string name="phone_verify_submit_label">验证</string>
+
+    <string name="account_email_label">邮箱</string>
+    <string name="account_phone_label">手机</string>
+    <string name="nickname_title_label">昵称（一旦设定，不可修改）</string>
+    <string name="user_photo_label">上传头像</string>
+    <string name="account_effort_label">贡献</string>
+    <string name="account_coin_label">金币</string>
+    <string name="account_posts_label">消息</string>
+    <string name="account_likes_label">收藏</string>
+    <string name="account_follows_label">关注</string>
+    <string name="account_reporter_label">举报</string>
+    <string name="account_reported_label">被举报</string>
+    <string name="account_range_label">搜索范围（千米）</string>
+    <string name="account_range_helper">【1~20】最大能够搜索20千米以内的消息</string>
+    <string name="account_address_label">送货地址</string>
+    <string name="account_submit_label">提交</string>
+
+    <string name="login_phone_label">手机号码</string>
+    <string name="login_password_label">密码</string>
+    <string name="login_submit_label">登陆</string>
+    <string name="login_forget_password_label">忘记密码？</string>
+
+    <string name="comment_title_label">说说你的想法...</string>
+
+    <string name="transfer_peer_label">对方手机号码</string>
+    <string name="transfer_coin_label">金币数量</string>
+    <string name="transfer_word_label">附言（可选）</string>
+    <string name="transfer_coin_helper">单次转账数量不能超过1000</string>
+    <string name="transfer_submit_label">转账</string>
+
+    <string name="reward_peer_label">对方手机号码</string>
+    <string name="reward_coin_label">金币数量</string>
+    <string name="reward_coin_helper">单次打赏不能超过 1000 枚金币</string>
+    <string name="reward_submit_label">打赏</string>
+
+    <string name="menu_item_filter_label">频道</string>
+    <string name="menu_item_register_label">注册</string>
+    <string name="menu_item_charge_label">充值</string>
+    <string name="menu_item_transfer_label">转账</string>
+    <string name="menu_item_chat_list_label">会话列表</string>
+    <string name="menu_item_home_label">返回首页</string>
+    <string name="menu_item_clear_search_history_label">清除历史记录</string>
+    <string name="menu_item_shopping_list_label">购物车</string>
+    <string name="menu_item_order_label">短信下单</string>
+    <string name="menu_item_send_label">发布</string>
+    <string name="menu_item_search_label">搜索</string>
+    <string name="menu_item_comment_label">评论</string>
+    <string name="menu_item_transfer_out_label">转出记录</string>
+    <string name="menu_item_transfer_in_label">转入记录</string>
+    <string name="menu_item_send_verify_code_label">重新获取验证码</string>
+
+    <string name="tag_title_label">搜索消息...</string>
+    <string name="search_tag_helper">多个关键字请用空格分开</string>
+    <string name="tag_submit_label">搜索</string>
+
+    <string name="yumi">【寻街APP】安卓版本下载： http://fir.im/xunjie</string>
+    <string name="share_label">请选择...</string>
+    <string name="share_title">寻街</string>
+
+    <string name="trade_forward">分享</string>
+    <string name="trade_order">加入购物车</string>
+    <string name="trade_cancel_order">移出购物车</string>
+    <string name="trade_shopHomePage">设为首页</string>
+    <string name="trade_cancel_shopHomePage">取消首页</string>
+    <string name="trade_shop">店铺</string>
+    <string name="trade_report">举报</string>
+    <string name="trade_viewer">看图</string>
+    <string name="trade_nav">导航</string>
+    <string name="trade_hide">隐藏</string>
+    <string name="trade_cancel_hide">显示</string>
+    <string name="trade_follow">关注</string>
+    <string name="trade_cancel_follow">取消关注</string>
+    <string name="trade_favorite">收藏</string>
+    <string name="trade_cancel_favorite">取消收藏</string>
+    <string name="trade_close">忽略</string>
+    <string name="trade_user_posts">查看Ta的全部消息</string>
+    <string name="trade_manage">管理</string>
+    <string name="trade_more">更多</string>
+    <string name="trade_like">投票</string>
+    <string name="trade_comment">评论</string>
+    <string name="trade_chat">聊天</string>
+    <string name="trade_group_chat">群聊</string>
+    <string name="trade_private_chat">私信</string>
+    <string name="trade_delete">删除</string>
+    <string name="trade_stick">置顶</string>
+    <string name="trade_refresh">刷新</string>
+    <string name="trade_ad">推广</string>
+    <string name="trade_update">编辑</string>
+    <string name="trade_nearby_msgs">〔全部消息〕</string>
+    <string name="trade_topics">〔资讯〕</string>
+    <string name="trade_news">〔文章〕</string>
+    <string name="trade_reads">〔美图〕</string>
+    <string name="trade_discovers">〔区块链〕</string>
+    <string name="trade_products">〔店铺〕</string>
+    <string name="trade_scenes">〔商品〕</string>
+    <string name="trade_foods">〔招聘〕</string>
+    <string name="trade_losts">〔教育〕</string>
+    <string name="trade_car">〔房屋〕</string>
+    <string name="trade_house">〔寻人寻物〕</string>
+    <string name="trade_newest">最新</string>
+    <string name="trade_hotest">最赞</string>
+    <string name="trade_best">最赞</string>
+    <string name="trade_cancel">取消</string>
+
+    <string name="action_more">搜索</string>
+    <string name="action_all">全部</string>
+    <string name="action_search">搜索消息</string>
+    <string name="action_post">我的发布</string>
+    <string name="action_user_post">Ta的消息</string>
+    <string name="action_info">我的页面</string>
+    <string name="action_follow">我的关注</string>
+    <string name="action_create">发布消息</string>
+    <string name="action_favorite">我的收藏</string>
+    <string name="action_add">收藏</string>
+    <string name="action_refresh">刷新</string>
+    <string name="action_shopping">购物车</string>
+
+    <string name="C">分类查询</string>
+
+    <!-- 图片浏览 -->
+    <string name="only_choose_num">超出可选图片张数</string>
+    <string name="finish">完成</string>
+    <string name="invalidSD">sdcard无效或没有插入！</string>
+    <string name="photo">选择相册</string>
+    <string name="album">相册</string>
+    <string name="preview">预览</string>
+    <string name="unfinished">完成</string>
+    <string name="camera_cancel">取消</string>
+    <string name="no_photo">相册没有图片</string>
+
+    <string name="help_title">寻街公约</string>
+    <string name="help_topic1_post1_bak">• 寻街是一个自由集市，您可以在这里发布商品消息。消息一经发布，附近的人们便可以看到</string>
+    <string name="help_topic1_post1">• 寻街是一个开放平台，人人都可以发布消息</string>
+    <string name="help_topic1_post0">• 寻街需要获知您的地理位置，以便您能够发布或者获取本地信息</string>
+    <string name="help_topic1_post2">• 人人都可以举报他人发布的违法、虚假等不良消息。被举报的消息累计达十条及以上者，以及恶意举报他人消息者，将被永久禁言</string>
+    <string name="help_topic1_post3">• 对于消息的真实性，平台不做担保，请自行鉴别，并欢迎举报虚假消息</string>
+    <string name="help_topic1_post4">• 对于交易上的纠纷，平台不承担责任，请您自行协商解决</string>
+    <string name="help_topic1_post5">• 使用平台的服务即意味着您同意以上全部约定</string>
+    <string name="help_submit_label">同意并继续</string>
+
+    <string name="qrcode_android_label">安卓版本</string>
+    <string name="qrcode_ios_label">苹果版本</string>
+
+    <string name="newUpdateAvailable">发现新版本</string>
+    <string name="dialogPositiveButton">立即下载</string>
+    <string name="dialogNegativeButton">以后再说</string>
+    <string name="app_no_new_update">没有发现新版本</string>
+    <string name="download_progress">正在下载:%1$d%%</string>
+    <string name="download_success">下载完成，点击安装</string>
+</resources>
