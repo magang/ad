@@ -1,7 +1,12 @@
 package com.chanlin.ad.view.home;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.util.SparseArray;
@@ -13,6 +18,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,12 +47,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.leancloud.AVUser;
+import cn.leancloud.types.AVNull;
 
 
 /**
  * @author dustforest
  */
 public class HomeCloudView extends QMUIWindowInsetLayout {
+    private static final String TAG = HomeCloudView.class.getName();
+
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
 
@@ -62,10 +71,13 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
     private List<Trade> mTrades;
     private Context mContext;
     private PushConfig mPush;
+    private Dialog mProgressDialog;
+    private AVUser currUser;
 
     public HomeCloudView(Context context) {
         super(context);
         mContext = context;
+        mPush = PushConfig.get(mContext);
         LayoutInflater.from(context).inflate(R.layout.home_layout, this);
         ButterKnife.bind(this);
         initTopBar();
@@ -246,7 +258,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                             ImageBrowseIntent.showUrlImageBrowse(mContext, newImagesUrls, 0);
                         }
                     });
-                }else if (count == 4) {
+                } else if (count == 4) {
                     tradeImage.setVisibility(View.GONE);
                     gridImage.setVisibility(View.GONE);
 
@@ -292,6 +304,88 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                     });
                 }
 
+                // 置顶按钮
+                stickButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                    }
+                });
+
+                // 投票按钮
+                likeButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                    }
+                });
+
+                // 举报按钮
+                reportButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                    }
+                });
+
+                // 删除按钮
+                deleteButton.setVisibility(View.VISIBLE);
+                deleteButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+//                        if (!User.isLoggedIn()) {
+//                            Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
+//                            Intent i = new Intent(mContext, LoginActivity.class);
+//                            startActivity(i);
+//                            return;
+//                        }
+//
+//                        if (User.isBadUser(mContext, true)) {
+//                            return;
+//                        }
+
+//                        User.syncUser();
+
+                        if (!item.isOn()) {
+                            Toast.makeText(mContext, "该条目已被投诉，无法删除！", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle("")
+                                .setMessage("确定删除该条目吗?")
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        mProgressDialog =
+                                                ProgressDialog.show(mContext, "", "正在删除，请稍候...", true);
+                                        io.reactivex.Observable<AVNull> observable =item.deleteInBackground();
+                                        mProgressDialog.dismiss();
+                                        Toast.makeText(mContext, "已删除", Toast.LENGTH_SHORT).show();
+                                        TradeLab.get(mContext).removeItemFromTrades(item.getObjectId());
+                                        mPush.needRefresh(false);
+                                        fetchData();
+                                    }
+                                })
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                    }
+                                })
+                                .show();
+
+                        TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+                        textView.setTextSize(16);
+                        textView.setTextColor(Color.parseColor("#757575"));
+                    }
+                });
+
+                // 忽略按钮
+                closeButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+//                        mPush.addGlobalAdIgnores(item.getObjectId());
+                        Toast.makeText(mContext, "已忽略", Toast.LENGTH_SHORT).show();
+                        TradeLab.get(mContext).removeItemFromTrades(item.getObjectId());
+                        mPush.needRefresh(false);
+                        fetchData();
+                    }
+                });
+
             }
         };
         mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -315,6 +409,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 mPullRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mPush.needRefresh(true);
                         fetchData();
                         mPullRefreshLayout.finishRefresh();
                     }

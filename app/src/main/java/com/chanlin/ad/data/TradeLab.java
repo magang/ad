@@ -102,15 +102,25 @@ public class TradeLab {
 
     public List<Trade> findTrades() {
         Log.i(TAG, "findTrades...");
+        if (!mPush.isRefreshNeeded()) {
+            return getCachedTrades();
+        }
 
         List<Trade> items = new ArrayList<>();
-        items.addAll(findGlobalAds(100, 1));
-        items.addAll(findHotTrades(100, 5));
-        items.addAll(findNewTrades(100, 5));
+        items.addAll(findGlobalAds(100, 100));
+        items.addAll(findHotTrades(1, 5));
+        items.addAll(findNewTrades(1, 5));
 
 //        return items.stream().distinct().collect(Collectors.toList());
         LinkedHashSet<Trade> hashSet = new LinkedHashSet<>(items);
-        return new ArrayList<>(hashSet);
+        mTrades = new ArrayList<>(hashSet);
+        return mTrades;
+    }
+
+    public List<Trade> getCachedTrades() {
+        Log.i(TAG, "getCachedTrades...");
+        Log.i(TAG, "items found: " + mTrades.size());
+        return mTrades;
     }
 
     public List<Trade> findNewTrades(int poolSize, int num) {
@@ -168,5 +178,18 @@ public class TradeLab {
         query.limit(poolSize);
 
         return getRandomItems(query, num);
+    }
+
+    public void removeItemFromTrades(String id) {
+        if (mTrades == null) {return;}
+        List<Trade> tmp = new ArrayList<>();
+
+        for (Trade c: mTrades) {
+            if (!c.getObjectId().equals(id)) {
+                tmp.add(c);
+            }
+        }
+
+        mTrades = tmp;
     }
 }
