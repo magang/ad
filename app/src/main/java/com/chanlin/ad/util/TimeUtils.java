@@ -2,8 +2,7 @@ package com.chanlin.ad.util;
 
 import java.util.Date;
 
-public class MyTime {
-
+public class TimeUtils {
     public static String getAge(Date startDate, Date endDate) {
         String interval = "";
 
@@ -37,8 +36,6 @@ public class MyTime {
                     int year = month / 12;
                     interval = year + " 年前";
                 }
-                // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                // interval = sdf.format(startDate);
             }
         }
 

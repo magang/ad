@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.chanlin.ad.config.PushConfig;
-import com.chanlin.ad.util.MyTime;
+import com.chanlin.ad.util.TimeUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -121,6 +121,32 @@ public class Trade extends AVObject {
     public String getImageThumbnailUrlMedium(Context ctx, int position) {
         return getImageThumbnailUrlBase(ctx, position,
                 PushConfig.getWidth(), 400);
+    }
+
+    public String getUserImageThumbnailUrlBase(Context ctx, int width, int height) {
+        AVFile avFile = this.getAVFile(USER_IMAGE_KEY);
+        if (avFile == null) {
+            return null;
+        } else {
+            return avFile.getThumbnailUrl(true,
+                    width,
+                    height,
+                    100,
+                    "jpg");
+        }
+    }
+
+    public String getUserImageThumbnailUrl(Context ctx) {
+        return getUserImageThumbnailUrlBase(ctx,
+                PushConfig.getWidth(), PushConfig.getHeight());
+    }
+
+    public String getUserImageThumbnailUrlSmall(Context ctx) {
+        return getUserImageThumbnailUrlBase(ctx, 60, 60);
+    }
+
+    public String getUserImageThumbnailUrlMedium(Context ctx) {
+        return getUserImageThumbnailUrlBase(ctx, 200, 200);
     }
 
     public AVFile getAVFile() {
@@ -520,7 +546,7 @@ public class Trade extends AVObject {
     public String getAge() {
         Date startDate = this.getCreatedAt();
         Date endDate = Calendar.getInstance().getTime();
-        return MyTime.getAge(startDate, endDate);
+        return TimeUtils.getAge(startDate, endDate);
     }
 
     public String calAdEndDate(int days) {

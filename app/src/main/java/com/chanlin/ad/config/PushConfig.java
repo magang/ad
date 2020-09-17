@@ -12,7 +12,6 @@ import android.view.WindowManager;
 
 import com.chanlin.ad.R;
 import com.chanlin.ad.data.Trade;
-import com.chanlin.ad.data.TradeLab;
 import com.chanlin.ad.data.User;
 
 import java.text.SimpleDateFormat;
@@ -934,23 +933,6 @@ public class PushConfig {
         }
     }
 
-    public boolean isRoamEnabled() {
-        return mIsRoamEnabled;
-    }
-
-    public void setRoamEnabled(boolean status) {
-        mIsRoamEnabled = status;
-        TradeLab.get(mAppContext).resetTrades();
-
-        try {
-            editor.putBoolean("ROAM_ENABLED_KEY", mIsRoamEnabled);
-            editor.commit();
-            Log.d(TAG, "editor.commit ROAM_ENABLED_KEY succeed: " + String.valueOf(mIsRoamEnabled));
-        } catch (Exception exception) {
-            Log.e(TAG, "editor.commit ROAM_ENABLED_KEY failed: " + exception);
-        }
-    }
-
     public boolean isAdEnabled() {
         if (mAdStatus.equals("off") || mAdStatus.equals("")) {
             return false;
@@ -1113,48 +1095,6 @@ public class PushConfig {
         } catch (Exception exception) {
             Log.e(TAG, "editor.commit SIGNATURE_ENABLED_KEY failed: " + exception);
         }
-    }
-
-    public boolean isNoImageMode() {
-        return mIsNoImageMode;
-    }
-
-    public void setNoImageMode(boolean status) {
-        mIsNoImageMode = status;
-        TradeLab.get(mAppContext).resetTrades();
-
-        try {
-            editor.putBoolean("NO_IMAGE_MODE_KEY", mIsNoImageMode);
-            editor.commit();
-            Log.d(TAG, "editor.commit NO_IMAGE_MODE_KEY succeed: " + String.valueOf(mIsNoImageMode));
-        } catch (Exception exception) {
-            Log.e(TAG, "editor.commit NO_IMAGE_MODE_KEY failed: " + exception);
-        }
-    }
-
-    public boolean isFilterEnabled() {
-        return mIsFilterEnabled;
-    }
-
-    public void setFilterEnabled(boolean status) {
-        mIsFilterEnabled = status;
-        TradeLab.get(mAppContext).resetTrades();
-
-        try {
-            editor.putBoolean("FILTER_ENABLED_KEY", mIsFilterEnabled);
-            editor.commit();
-            Log.d(TAG, "editor.commit FILTER_ENABLED_KEY succeed: " + String.valueOf(mIsFilterEnabled));
-        } catch (Exception exception) {
-            Log.e(TAG, "editor.commit FILTER_ENABLED_KEY failed: " + exception);
-        }
-    }
-
-    public boolean isRongYunConnected() {
-        return mIsRongYunConnected;
-    }
-
-    public void setRongYunConnected(boolean status) {
-        mIsRongYunConnected = status;
     }
 
     public boolean isSearchRecordEnabled() {
@@ -2425,22 +2365,6 @@ public class PushConfig {
         return mTradeTag;
     }
 
-    public void setRange(String range) {
-        mRange = range;
-        TradeLab.get(mAppContext).resetTrades();
-
-        try {
-            editor.putString("RANGE_KEY", mRange);
-            editor.commit();
-            Log.d(TAG, "editor.commit RANGE_KEY succeed: " + mRange);
-        } catch (Exception exception) {
-            Log.e(TAG, "editor.commit RANGE_KEY failed: " + exception);
-        }
-    }
-
-    public String getRange() {
-        return mRange;
-    }
 
     public void setSignature(String signature) {
         mSignature = signature;
@@ -2456,23 +2380,6 @@ public class PushConfig {
 
     public String getSignature() {
         return mSignature;
-    }
-
-    public void setFilter(String filter) {
-        mFilter = filter;
-        TradeLab.get(mAppContext).resetTrades();
-
-        try {
-            editor.putString("FILTER_KEY", mFilter);
-            editor.commit();
-            Log.d(TAG, "editor.commit FILTER_KEY succeed: " + mFilter);
-        } catch (Exception exception) {
-            Log.e(TAG, "editor.commit FILTER_KEY failed: " + exception);
-        }
-    }
-
-    public String getFilter() {
-        return mFilter;
     }
 
     public void setPassword(String password) {

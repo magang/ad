@@ -22,8 +22,10 @@ import com.chanlin.ad.adapter.ImageAdapter;
 import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.base.BaseRecyclerAdapter;
 import com.chanlin.ad.base.RecyclerViewHolder;
+import com.chanlin.ad.config.PushConfig;
 import com.chanlin.ad.data.Trade;
 import com.chanlin.ad.data.TradeLab;
+import com.chanlin.ad.data.User;
 import com.chanlin.ad.fragment.QDAboutFragment;
 import com.chanlin.ad.listener.HomeViewListener;
 import com.kevin.photo_browse.ImageBrowseIntent;
@@ -45,7 +47,6 @@ import cn.leancloud.AVUser;
  * @author dustforest
  */
 public class HomeCloudView extends QMUIWindowInsetLayout {
-
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
 
@@ -60,6 +61,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
     private BaseRecyclerAdapter<Trade> mAdapter;
     private List<Trade> mTrades;
     private Context mContext;
+    private PushConfig mPush;
 
     public HomeCloudView(Context context) {
         super(context);
@@ -141,7 +143,6 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
 
             @Override
             public void bindData(RecyclerViewHolder holder, int position, Trade item) {
-                TextView tradeDistance = (TextView)holder.getView(R.id.trade_distance);
                 TextView tradeAge = (TextView)holder.getView(R.id.trade_age);
                 TextView userName = (TextView)holder.getView(R.id.user_name);
                 TextView tradeDetails = (TextView)holder.getView(R.id.trade_details);
@@ -165,6 +166,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                         mContext.getString(R.string.trade_like) + " " + item.getVoteCount();
                 likeButton.setText(btnLikeText);
 
+                // 重置所有元素
                 stickButton.setVisibility(View.VISIBLE);
                 closeButton.setVisibility(View.VISIBLE);
                 deleteButton.setVisibility(View.VISIBLE);
@@ -175,23 +177,24 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 gridImage.setVisibility(View.VISIBLE);
                 gridImageTwoColumns.setVisibility(View.VISIBLE);
 
+                // 投票是必须功能，默认保留
                 stickButton.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.GONE);
                 closeButton.setVisibility(View.GONE);
                 adminImage.setVisibility(View.GONE);
                 adImage.setVisibility(View.GONE);
 
-                if (item.isAd()) {
-                    reportButton.setVisibility(View.GONE);
-                    closeButton.setVisibility(View.VISIBLE);
-                    adImage.setVisibility(View.VISIBLE);
-                }
-
+                // 管理员图标
                 if (item.isAdmin()) {
-                    stickButton.setVisibility(View.VISIBLE);
                     adminImage.setVisibility(View.VISIBLE);
                 }
 
+                // 管理员，可以置顶任何消息
+                if (User.isAdmin()) {
+                    stickButton.setVisibility(View.VISIBLE);
+                }
+
+                // 自己发布的消息，可以删除
                 AVUser currUser = AVUser.getCurrentUser();
                 if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
                     String phone = currUser.getString("mobilePhoneNumber");
@@ -202,18 +205,47 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                     }
                 }
 
+                // 置顶消息，不允许举报、删除，可以忽略
+                if (item.isAd()) {
+                    deleteButton.setVisibility(View.GONE);
+                    reportButton.setVisibility(View.GONE);
+                    closeButton.setVisibility(View.VISIBLE);
+                    adImage.setVisibility(View.VISIBLE);
+                }
+
+                // 用户头像
+                String photoUrl = item.getUserImageThumbnailUrlSmall(mContext);
+                if (photoUrl != null) {
+                    ImageLoader.getInstance().displayImage(photoUrl, tradeUserPhoto);
+                }
+
+                // 消息图片
                 int count = item.getImageCount();
                 if (count <= 0) {
                     tradeImage.setVisibility(View.GONE);
                     gridImage.setVisibility(View.GONE);
                     gridImageTwoColumns.setVisibility(View.GONE);
                 } else if (count == 1) {
+                    gridImage.setVisibility(View.GONE);
+                    gridImageTwoColumns.setVisibility(View.GONE);
+
                     String imageUrl = item.getImageThumbnailUrlMedium(mContext, 0);
                     if (imageUrl != null) {
                         ImageLoader.getInstance().displayImage(imageUrl, tradeImage);
                     } else {
                         tradeImage.setVisibility(View.GONE);
                     }
+
+                    final List<String> newImagesUrls = new ArrayList<>();
+                    for(int i = 0; i < count; i++) {
+                        newImagesUrls.add(item.getImageThumbnailUrl(mContext, i));
+                    }
+                    tradeImage.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view) {
+                            ImageBrowseIntent.showUrlImageBrowse(mContext, newImagesUrls, 0);
+                        }
+                    });
                 }else if (count == 4) {
                     tradeImage.setVisibility(View.GONE);
                     gridImage.setVisibility(View.GONE);
@@ -232,14 +264,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                     }
                     gridImageTwoColumns.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                                long id) {
-//                            Toast.makeText(mContext, "click image", Toast.LENGTH_SHORT).show();
-//                            mPush.setImageUrls(newImagesUrls);
-//                            mPush.setImagePosition(position);
-//                            Intent i = new Intent(mContext, GalleryUrlActivity.class);
-//                            mContext.startActivity(i);
-
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             ImageBrowseIntent.showUrlImageBrowse(mContext, newImagesUrls, position);
                         }
                     });
@@ -261,13 +286,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                     }
                     gridImage.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                                long id) {
-//                            Toast.makeText(mContext, "click image", Toast.LENGTH_SHORT).show();
-//                            mPush.setImageUrls(newImagesUrls);
-//                            mPush.setImagePosition(position);
-//                            Intent i = new Intent(mContext, GalleryUrlActivity.class);
-//                            mContext.startActivity(i);
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             ImageBrowseIntent.showUrlImageBrowse(mContext, newImagesUrls, position);
                         }
                     });
@@ -286,14 +305,10 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
         fetchData();
         mPullRefreshLayout.setOnPullListener(new QMUIPullRefreshLayout.OnPullListener() {
             @Override
-            public void onMoveTarget(int offset) {
-
-            }
+            public void onMoveTarget(int offset) {}
 
             @Override
-            public void onMoveRefreshView(int offset) {
-
-            }
+            public void onMoveRefreshView(int offset) {}
 
             @Override
             public void onRefresh() {

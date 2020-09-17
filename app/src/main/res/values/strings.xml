@@ -10,6 +10,7 @@
     <string name="about_item_github">GitHub</string>
     <string name="about_copyright">© %1$s QMUI Team All rights reserved.</string>
 
+    <!-- 寻街 -->
     <string name="new_crime">发布消息</string>
     <string name="delete_crime">删除条目</string>
     <string name="show_subtitle">显示位置</string>
@@ -224,8 +225,6 @@
     <string name="action_refresh">刷新</string>
     <string name="action_shopping">购物车</string>
 
-    <string name="C">分类查询</string>
-
     <!-- 图片浏览 -->
     <string name="only_choose_num">超出可选图片张数</string>
     <string name="finish">完成</string>
@@ -236,24 +235,4 @@
     <string name="unfinished">完成</string>
     <string name="camera_cancel">取消</string>
     <string name="no_photo">相册没有图片</string>
-
-    <string name="help_title">寻街公约</string>
-    <string name="help_topic1_post1_bak">• 寻街是一个自由集市，您可以在这里发布商品消息。消息一经发布，附近的人们便可以看到</string>
-    <string name="help_topic1_post1">• 寻街是一个开放平台，人人都可以发布消息</string>
-    <string name="help_topic1_post0">• 寻街需要获知您的地理位置，以便您能够发布或者获取本地信息</string>
-    <string name="help_topic1_post2">• 人人都可以举报他人发布的违法、虚假等不良消息。被举报的消息累计达十条及以上者，以及恶意举报他人消息者，将被永久禁言</string>
-    <string name="help_topic1_post3">• 对于消息的真实性，平台不做担保，请自行鉴别，并欢迎举报虚假消息</string>
-    <string name="help_topic1_post4">• 对于交易上的纠纷，平台不承担责任，请您自行协商解决</string>
-    <string name="help_topic1_post5">• 使用平台的服务即意味着您同意以上全部约定</string>
-    <string name="help_submit_label">同意并继续</string>
-
-    <string name="qrcode_android_label">安卓版本</string>
-    <string name="qrcode_ios_label">苹果版本</string>
-
-    <string name="newUpdateAvailable">发现新版本</string>
-    <string name="dialogPositiveButton">立即下载</string>
-    <string name="dialogNegativeButton">以后再说</string>
-    <string name="app_no_new_update">没有发现新版本</string>
-    <string name="download_progress">正在下载:%1$d%%</string>
-    <string name="download_success">下载完成，点击安装</string>
 </resources>

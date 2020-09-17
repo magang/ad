@@ -26,7 +26,6 @@ import com.qmuiteam.qmui.arch.QMUISwipeBackActivityManager;
 import java.io.File;
 import java.io.IOException;
 
-import cn.leancloud.AVLogger;
 import cn.leancloud.AVOSCloud;
 import cn.leancloud.AVObject;
 
@@ -74,7 +73,7 @@ public class QDApplication extends MultiDexApplication {
         QMUISwipeBackActivityManager.init(this);
         QDSkinManager.install(this);
 
-        AVOSCloud.setLogLevel(AVLogger.Level.DEBUG);
+//        AVOSCloud.setLogLevel(AVLogger.Level.DEBUG);
         AVOSCloud.initialize(this, "gbk2tajd9ed82kag7gpb553q4jg1xsect5pfbgqerieljwzj",
                 "wd49cigwgbyq7o3k3iq25zn30tizjqwrzn0u6c46d4epm35r",
                 "https://gbk2tajd.lc-cn-n1-shared.com");
