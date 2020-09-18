@@ -38,17 +38,17 @@ import org.jetbrains.annotations.NotNull;
  * @date 2016-10-21
  */
 
-public class GridDividerItemDecoration extends RecyclerView.ItemDecoration implements IQMUISkinHandlerDecoration {
+public class QDGridDividerItemDecoration extends RecyclerView.ItemDecoration implements IQMUISkinHandlerDecoration {
 
     private Paint mDividerPaint = new Paint();
     private int mSpanCount;
     private final int mDividerAttr;
 
-    public GridDividerItemDecoration(Context context, int spanCount) {
+    public QDGridDividerItemDecoration(Context context, int spanCount) {
         this(context, spanCount, R.attr.qmui_skin_support_color_separator, 1f);
     }
 
-    public GridDividerItemDecoration(Context context, int spanCount, int dividerColorAttr, float dividerWidth) {
+    public QDGridDividerItemDecoration(Context context, int spanCount, int dividerColorAttr, float dividerWidth) {
         mSpanCount = spanCount;
         mDividerAttr = dividerColorAttr;
         mDividerPaint.setStrokeWidth(dividerWidth);

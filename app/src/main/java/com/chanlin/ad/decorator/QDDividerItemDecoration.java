@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @date 2016-10-21
  */
 
-public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+public class QDDividerItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
@@ -40,7 +40,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
     private Drawable mDivider;
     private int mOrientation;
-    public DividerItemDecoration(Context context, int orientation) {
+    public QDDividerItemDecoration(Context context, int orientation) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();

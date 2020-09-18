@@ -9,12 +9,14 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Parcelable;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import com.chanlin.ad.config.PushConfig;
 import com.chanlin.ad.data.Trade;
 import com.chanlin.ad.data.TradeLab;
 import com.chanlin.ad.data.User;
+import com.chanlin.ad.decorator.SpaceItemDecoration;
 import com.chanlin.ad.fragment.QDAboutFragment;
 import com.chanlin.ad.listener.HomeViewListener;
 import com.kevin.photo_browse.ImageBrowseIntent;
@@ -43,11 +46,15 @@ import com.qmuiteam.qmui.widget.pullRefreshLayout.QMUIPullRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.leancloud.AVObject;
 import cn.leancloud.AVUser;
 import cn.leancloud.types.AVNull;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -147,6 +154,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
             }
         });
 
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration(30));
         mAdapter = new BaseRecyclerAdapter<Trade>(getContext(), null) {
             @Override
             public int getItemLayoutId(int viewType) {
@@ -193,13 +201,14 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 stickButton.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.GONE);
                 closeButton.setVisibility(View.GONE);
+                reportButton.setVisibility(View.GONE);
                 adminImage.setVisibility(View.GONE);
                 adImage.setVisibility(View.GONE);
 
                 // 管理员图标
-                if (item.isAdmin()) {
-                    adminImage.setVisibility(View.VISIBLE);
-                }
+//                if (item.isAdmin()) {
+//                    adminImage.setVisibility(View.VISIBLE);
+//                }
 
                 // 管理员，可以置顶任何消息
                 if (User.isAdmin()) {
@@ -315,6 +324,87 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 likeButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
+//                        if (!User.isLoggedIn()) {
+//                            Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
+//                            Intent i = new Intent(mContext, LoginActivity.class);
+//                            startActivity(i);
+//                            return;
+//                        }
+
+//                        if (User.isBadUser(mContext, true)) {
+//                            return;
+//                        }
+
+//                        User.syncUser();
+
+
+                        final EditText inputServer = new EditText(mContext);
+                        inputServer.setFocusable(true);
+
+                        String title = "投票数量";
+                        AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle(title)
+                                .setView(inputServer)
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        String mVote = inputServer.getText().toString();
+                                        AVUser currUser = AVUser.getCurrentUser();
+
+//                                        else if (Double.parseDouble(mVote) > currUser.getDouble("ticket")) {
+////                                            Toast.makeText(mContext, "选票余额不足！", Toast.LENGTH_SHORT).show();
+////                                        }
+
+                                        if (mVote == null || mVote.equals("")) {
+                                            Toast.makeText(mContext, "投票数量不能为空！", Toast.LENGTH_SHORT).show();
+                                        } else if (!isInteger(mVote) && !isDouble(mVote) ) {
+                                            Toast.makeText(mContext, "投票数量必须是数字！", Toast.LENGTH_SHORT).show();
+                                        } else if (Double.parseDouble(mVote) <= 0) {
+                                            Toast.makeText(mContext, "投票数量不能为零！", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            String mLocal = "null";
+                                            String mLocalName = "";
+                                            String mPeer = "";
+                                            String mPeerName = "";
+                                            mPeer = item.getUser();
+                                            mPeerName = item.getUserName();
+
+                                            final AVObject vote = new AVObject("Vote");
+                                            vote.put("status", "submit");
+                                            vote.put("to", mPeer.trim());
+                                            vote.put("toName", mPeerName);
+                                            vote.put("item", item.getObjectId());
+                                            vote.put("votes", Double.parseDouble(mVote));
+                                            vote.put("score", Double.parseDouble("10"));
+
+                                            if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
+                                                mLocal = currUser.getString("mobilePhoneNumber");
+                                                mLocalName = currUser.getString("nickname");
+                                            }
+
+                                            vote.put("from", mLocal.trim());
+                                            vote.put("fromName", mLocalName);
+
+                                            vote.saveInBackground().subscribe(new Observer<AVObject>() {
+                                                public void onSubscribe(Disposable disposable) {}
+                                                public void onNext(AVObject todo) {
+                                                    // 成功保存之后，执行其他逻辑
+                                                    Log.d(TAG, "Vote successfully.");
+                                                }
+                                                public void onError(Throwable throwable) {
+                                                    // 异常处理
+                                                    Log.e(TAG, "Vote failed: " + throwable.getMessage());
+                                                }
+                                                public void onComplete() {}
+                                            });
+
+                                            Toast.makeText(mContext, "投票成功！", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                    }
+                                })
+                                .show();
                     }
                 });
 
@@ -326,7 +416,6 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 });
 
                 // 删除按钮
-                deleteButton.setVisibility(View.VISIBLE);
                 deleteButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
@@ -432,5 +521,23 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
         mRecyclerView.setId(mDiffRecyclerViewSaveStateId);
         super.dispatchRestoreInstanceState(container);
         mRecyclerView.setId(id);
+    }
+
+    //判断整数（int）
+    private boolean isInteger(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
+    //判断浮点数（double和float）
+    private boolean isDouble(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[-\\+]?[.\\d]*$");
+        return pattern.matcher(str).matches();
     }
 }

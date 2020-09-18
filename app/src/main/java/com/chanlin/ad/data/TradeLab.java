@@ -46,7 +46,7 @@ public class TradeLab {
         Log.i(TAG, "find remote searches");
 
         AVQuery<Trade> query = AVQuery.getQuery(Trade.TRADE_CLASS);
-        mSearchResults = new ArrayList<Trade>();
+        mSearchResults = new ArrayList<>();
         if (userTag != null && !userTag.equals("")) {
 
             String pattern = ".*(";
@@ -108,8 +108,8 @@ public class TradeLab {
 
         List<Trade> items = new ArrayList<>();
         items.addAll(findGlobalAds(100, 100));
-        items.addAll(findHotTrades(1, 5));
         items.addAll(findNewTrades(1, 5));
+        items.addAll(findHotTrades(1, 5));
 
 //        return items.stream().distinct().collect(Collectors.toList());
         LinkedHashSet<Trade> hashSet = new LinkedHashSet<>(items);
@@ -130,6 +130,7 @@ public class TradeLab {
         query.whereEqualTo("status", "on");
         query.whereEqualTo("type", "trade");
         query.whereEqualTo("online", "online");
+        query.whereEqualTo("user", "15539509926");
         query.orderByDescending("createdAt");
         query.limit(poolSize);
 
@@ -143,6 +144,7 @@ public class TradeLab {
         query.whereEqualTo("status", "on");
         query.whereEqualTo("type", "trade");
         query.whereEqualTo("online", "online");
+        query.whereEqualTo("user", "15539509926");
         query.addDescendingOrder("totalVotes");
         query.limit(poolSize);
 
