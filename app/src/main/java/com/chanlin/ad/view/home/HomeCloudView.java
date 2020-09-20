@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Parcelable;
+import android.text.InputType;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,9 +39,12 @@ import com.chanlin.ad.fragment.QDAboutFragment;
 import com.chanlin.ad.listener.HomeViewListener;
 import com.kevin.photo_browse.ImageBrowseIntent;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.qmuiteam.qmui.skin.QMUISkinManager;
 import com.qmuiteam.qmui.util.QMUIViewHelper;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
 import com.qmuiteam.qmui.widget.QMUIWindowInsetLayout;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.qmuiteam.qmui.widget.pullRefreshLayout.QMUIPullRefreshLayout;
 
 import java.util.ArrayList;
@@ -119,6 +122,11 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
         new RemoteDataTask().execute();
     }
 
+    private void fetchData (boolean needRefresh) {
+        mPush.needRefresh(needRefresh);
+        new RemoteDataTask().execute();
+    }
+
     private void loadData() {
         mAdapter.setData(mTrades);
     }
@@ -183,7 +191,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 tradeAge.setText(item.getAge());
 
                 String btnLikeText = item.getVoteCount() == 0 ? mContext.getString(R.string.trade_like) :
-                        mContext.getString(R.string.trade_like) + " " + item.getVoteCount();
+                        mContext.getString(R.string.trade_like) + "（" + item.getVoteCount() + "）";
                 likeButton.setText(btnLikeText);
 
                 // 重置所有元素
@@ -230,7 +238,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 if (item.isAd()) {
                     deleteButton.setVisibility(View.GONE);
                     reportButton.setVisibility(View.GONE);
-                    closeButton.setVisibility(View.VISIBLE);
+                    closeButton.setVisibility(View.GONE);
                     adImage.setVisibility(View.VISIBLE);
                 }
 
@@ -337,16 +345,23 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
 
 //                        User.syncUser();
 
-
-                        final EditText inputServer = new EditText(mContext);
-                        inputServer.setFocusable(true);
-
-                        String title = "投票数量";
-                        AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle(title)
-                                .setView(inputServer)
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        String mVote = inputServer.getText().toString();
+                        int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
+                        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(mContext);
+                        builder.setTitle("投票")
+                                .setSkinManager(QMUISkinManager.defaultInstance(getContext()))
+                                .setPlaceholder("投票数量")
+                                .setInputType(InputType.TYPE_CLASS_TEXT)
+                                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                                    @Override
+                                    public void onClick(QMUIDialog dialog, int index) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .addAction("确定", new QMUIDialogAction.ActionListener() {
+                                    @Override
+                                    public void onClick(QMUIDialog dialog, int index) {
+//                                        CharSequence text = builder.getEditText().getText();
+                                        String mVote = builder.getEditText().getText().toString();
                                         AVUser currUser = AVUser.getCurrentUser();
 
 //                                        else if (Double.parseDouble(mVote) > currUser.getDouble("ticket")) {
@@ -397,14 +412,94 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                             });
 
                                             Toast.makeText(mContext, "投票成功！", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+
+//                                            final QMUITipDialog tipDialog;
+//                                            tipDialog = new QMUITipDialog.Builder(mContext)
+//                                                    .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
+//                                                    .setTipWord("投票成功")
+//                                                    .create();
+//                                            tipDialog.show();
+//                                            postDelayed(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    tipDialog.dismiss();
+//                                                }
+//                                            }, 1500);
+                                            fetchData(true);
                                         }
                                     }
                                 })
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                    }
-                                })
-                                .show();
+                                .create(mCurrentDialogStyle).show();
+
+
+//                        final EditText inputServer = new EditText(mContext);
+//                        inputServer.setFocusable(true);
+//
+//                        String title = "投票数量";
+//                        AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle(title)
+//                                .setView(inputServer)
+//                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//                                        String mVote = inputServer.getText().toString();
+//                                        AVUser currUser = AVUser.getCurrentUser();
+//
+////                                        else if (Double.parseDouble(mVote) > currUser.getDouble("ticket")) {
+//////                                            Toast.makeText(mContext, "选票余额不足！", Toast.LENGTH_SHORT).show();
+//////                                        }
+//
+//                                        if (mVote == null || mVote.equals("")) {
+//                                            Toast.makeText(mContext, "投票数量不能为空！", Toast.LENGTH_SHORT).show();
+//                                        } else if (!isInteger(mVote) && !isDouble(mVote) ) {
+//                                            Toast.makeText(mContext, "投票数量必须是数字！", Toast.LENGTH_SHORT).show();
+//                                        } else if (Double.parseDouble(mVote) <= 0) {
+//                                            Toast.makeText(mContext, "投票数量不能为零！", Toast.LENGTH_SHORT).show();
+//                                        } else {
+//                                            String mLocal = "null";
+//                                            String mLocalName = "";
+//                                            String mPeer = "";
+//                                            String mPeerName = "";
+//                                            mPeer = item.getUser();
+//                                            mPeerName = item.getUserName();
+//
+//                                            final AVObject vote = new AVObject("Vote");
+//                                            vote.put("status", "submit");
+//                                            vote.put("to", mPeer.trim());
+//                                            vote.put("toName", mPeerName);
+//                                            vote.put("item", item.getObjectId());
+//                                            vote.put("votes", Double.parseDouble(mVote));
+//                                            vote.put("score", Double.parseDouble("10"));
+//
+//                                            if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
+//                                                mLocal = currUser.getString("mobilePhoneNumber");
+//                                                mLocalName = currUser.getString("nickname");
+//                                            }
+//
+//                                            vote.put("from", mLocal.trim());
+//                                            vote.put("fromName", mLocalName);
+//
+//                                            vote.saveInBackground().subscribe(new Observer<AVObject>() {
+//                                                public void onSubscribe(Disposable disposable) {}
+//                                                public void onNext(AVObject todo) {
+//                                                    // 成功保存之后，执行其他逻辑
+//                                                    Log.d(TAG, "Vote successfully.");
+//                                                }
+//                                                public void onError(Throwable throwable) {
+//                                                    // 异常处理
+//                                                    Log.e(TAG, "Vote failed: " + throwable.getMessage());
+//                                                }
+//                                                public void onComplete() {}
+//                                            });
+//
+//                                            Toast.makeText(mContext, "投票成功！", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//                                })
+//                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//                                    }
+//                                })
+//                                .show();
                     }
                 });
 
@@ -447,8 +542,8 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                         mProgressDialog.dismiss();
                                         Toast.makeText(mContext, "已删除", Toast.LENGTH_SHORT).show();
                                         TradeLab.get(mContext).removeItemFromTrades(item.getObjectId());
-                                        mPush.needRefresh(false);
-                                        fetchData();
+//                                        mPush.needRefresh(false);
+                                        fetchData(false);
                                     }
                                 })
                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -467,11 +562,11 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 closeButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-//                        mPush.addGlobalAdIgnores(item.getObjectId());
+                        mPush.addGlobalAdIgnores(item.getObjectId());
                         Toast.makeText(mContext, "已忽略", Toast.LENGTH_SHORT).show();
                         TradeLab.get(mContext).removeItemFromTrades(item.getObjectId());
-                        mPush.needRefresh(false);
-                        fetchData();
+//                        mPush.needRefresh(false);
+                        fetchData(false);
                     }
                 });
 
@@ -485,7 +580,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
             }
         });
         mRecyclerView.setAdapter(mAdapter);
-        fetchData();
+        fetchData(true);
         mPullRefreshLayout.setOnPullListener(new QMUIPullRefreshLayout.OnPullListener() {
             @Override
             public void onMoveTarget(int offset) {}
@@ -498,8 +593,8 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 mPullRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mPush.needRefresh(true);
-                        fetchData();
+//                        mPush.needRefresh(true);
+                        fetchData(true);
                         mPullRefreshLayout.finishRefresh();
                     }
                 }, 2000);

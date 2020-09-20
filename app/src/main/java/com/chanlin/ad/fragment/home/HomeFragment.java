@@ -144,12 +144,12 @@ public class HomeFragment extends BaseFragment {
         QMUITab cloud = builder
                 .setNormalDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_tabbar_cloud))
                 .setSelectedDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_tabbar_cloud_selected))
-                .setText("信息")
+                .setText("消息")
                 .build(getContext());
         QMUITab info = builder
                 .setNormalDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_tabbar_info))
                 .setSelectedDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.icon_tabbar_info_selected))
-                .setText("我")
+                .setText("账户")
                 .build(getContext());
 
         mTabSegment.addTab(cloud).addTab(info);

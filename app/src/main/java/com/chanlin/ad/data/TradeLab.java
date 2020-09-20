@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import cn.leancloud.AVQuery;
@@ -26,6 +25,7 @@ public class TradeLab {
     private List<Trade> mSearchResults = new ArrayList<>();
     private int mLimit = 100;
     private PushConfig mPush;
+    private int mIndex = 0;
 
     private TradeLab(Context appContext) {
         mAppContext = appContext;
@@ -102,19 +102,41 @@ public class TradeLab {
 
     public List<Trade> findTrades() {
         Log.i(TAG, "findTrades...");
+
         if (!mPush.isRefreshNeeded()) {
             return getCachedTrades();
         }
 
-        List<Trade> items = new ArrayList<>();
-        items.addAll(findGlobalAds(100, 100));
-        items.addAll(findNewTrades(1, 5));
-        items.addAll(findHotTrades(1, 5));
+        mTrades = findGlobalAds(10, 1);
+        if (!mTrades.isEmpty()) {
+            return mTrades;
+        }
 
-//        return items.stream().distinct().collect(Collectors.toList());
-        LinkedHashSet<Trade> hashSet = new LinkedHashSet<>(items);
-        mTrades = new ArrayList<>(hashSet);
+        switch (mIndex) {
+            case 0:
+                mTrades = findHotTrades(100, 1);
+                break;
+            case 1:
+            default:
+                mTrades = findNewTrades(100, 1);
+                break;
+        }
+
+        mIndex++;
+        mIndex = mIndex % 2;
+
         return mTrades;
+
+
+//        List<Trade> items = new ArrayList<>();
+//        items.addAll(findGlobalAds(100, 100));
+//        items.addAll(findHotTrades(100, 5));
+//        items.addAll(findNewTrades(100, 5));
+
+//        LinkedHashSet<Trade> hashSet = new LinkedHashSet<>(items);
+//        mTrades = new ArrayList<>(hashSet);
+//        mTrades = items.stream().distinct().collect(Collectors.toList());
+//        return mTrades;
     }
 
     public List<Trade> getCachedTrades() {
@@ -179,7 +201,12 @@ public class TradeLab {
         query.orderByDescending("createdAt");
         query.limit(poolSize);
 
-        return getRandomItems(query, num);
+        List<Trade> items = getRandomItems(query, num);
+        for (Trade item : items) {
+            mPush.addGlobalAdIgnores(item.getObjectId());
+        }
+
+        return items;
     }
 
     public void removeItemFromTrades(String id) {

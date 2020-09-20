@@ -328,6 +328,10 @@ public class Trade extends AVObject {
         return (int) (this.getDouble(VOTE_COUNT_KEY));
     }
 
+    public void incrVoteCount(double num) {
+        this.put(VOTE_COUNT_KEY, getVoteCount() + num);
+    }
+
     public int getAwardCount() {
         return this.getInt(AWARD_COUNT_KEY);
     }
