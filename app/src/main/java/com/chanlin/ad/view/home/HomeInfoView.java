@@ -9,8 +9,11 @@ import android.widget.Toast;
 import com.chanlin.ad.R;
 import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.config.PushConfig;
+import com.chanlin.ad.data.User;
+import com.chanlin.ad.fragment.AccountFragment;
 import com.chanlin.ad.fragment.LoginFragment;
 import com.chanlin.ad.fragment.QDAboutFragment;
+import com.chanlin.ad.fragment.RegisterFragment;
 import com.chanlin.ad.listener.HomeViewListener;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
@@ -70,7 +73,13 @@ public class HomeInfoView extends QMUIWindowInsetLayout {
     }
 
     private void initGroupListView() {
+        QMUICommonListItemView registerItem = mGroupListView.createItemView("注册");
+        registerItem.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
+
         QMUICommonListItemView loginItem = mGroupListView.createItemView("登录");
+        loginItem.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
+
+        QMUICommonListItemView logoutItem = mGroupListView.createItemView("退出登录");
         loginItem.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
 
         QMUICommonListItemView accountItem = mGroupListView.createItemView("账户");
@@ -81,11 +90,20 @@ public class HomeInfoView extends QMUIWindowInsetLayout {
             public void onClick(View v) {
                 if (v instanceof QMUICommonListItemView) {
                     String text = ((QMUICommonListItemView) v).getText().toString();
-                    Toast.makeText(mContext, text + " is Clicked", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, text + " is Clicked", Toast.LENGTH_SHORT).show();
                     switch(text) {
+                        case "注册":
+                            startFragment(new RegisterFragment());
+                            break;
                         case "登录":
-                            LoginFragment loginFragment = new LoginFragment();
-                            startFragment(loginFragment);
+                            startFragment(new LoginFragment());
+                            break;
+                        case "账户":
+                            startFragment(new AccountFragment());
+                            break;
+                        case "退出登录":
+                            User.logout();
+                            Toast.makeText(mContext, "已退出", Toast.LENGTH_SHORT).show();
                             break;
                         default:
                             break;
@@ -100,8 +118,17 @@ public class HomeInfoView extends QMUIWindowInsetLayout {
                 .setTitle(null)
                 .setDescription(null)
                 .setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .addItemView(registerItem, onClickListener)
                 .addItemView(loginItem, onClickListener)
                 .addItemView(accountItem, onClickListener)
+                .setMiddleSeparatorInset(QMUIDisplayHelper.dp2px(getContext(), 16), 0)
+                .addTo(mGroupListView);
+
+        QMUIGroupListView.newSection(getContext())
+                .setTitle(null)
+                .setDescription(null)
+                .setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .addItemView(logoutItem, onClickListener)
                 .setMiddleSeparatorInset(QMUIDisplayHelper.dp2px(getContext(), 16), 0)
                 .addTo(mGroupListView);
     }

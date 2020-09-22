@@ -7,14 +7,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chanlin.ad.R;
 import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.config.PushConfig;
-import com.chanlin.ad.data.User;
+import com.chanlin.ad.view.button.CircularProgressButton;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
 
 import butterknife.BindView;
@@ -23,29 +22,35 @@ import cn.leancloud.AVUser;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class LoginFragment extends BaseFragment {
+public class RegisterFragment extends BaseFragment {
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
 
-    @BindView(R.id.login_phone)
+    @BindView(R.id.register_phone)
     EditText mPhoneField;
 
-    @BindView(R.id.login_password)
+    @BindView(R.id.register_password)
     EditText mPasswordField;
 
-    @BindView(R.id.login_submit)
-    Button mSubmitButton;
+    @BindView(R.id.register_password_confirm)
+    EditText mPasswordConfirmField;
 
-    public static final String TAG = "LoginFragment";
+    @BindView(R.id.register_submit)
+    CircularProgressButton mSubmitButton;
+
+    public static final String TAG = RegisterFragment.class.getName();
     private String mPassword;
+    private String mPasswordConfirm;
     private String mPhone;
+    private String mStatus = "on";
+    private String mTag = "";
     private Dialog mProgressDialog;
     private PushConfig mPush;
 
     @Override
     protected View onCreateView() {
         mPush = PushConfig.get(getActivity());
-        View root = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login, null);
+        View root = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_register, null);
         ButterKnife.bind(this, root);
 
         initTopBar();
@@ -62,7 +67,7 @@ public class LoginFragment extends BaseFragment {
             }
         });
 
-        mTopBar.setTitle("登录");
+        mTopBar.setTitle("注册账号");
     }
 
     private void initView() {
@@ -78,12 +83,6 @@ public class LoginFragment extends BaseFragment {
             }
         });
 
-        String lastLoginPhone = mPush.getPhone();
-        if (lastLoginPhone != null && !lastLoginPhone.equals("")) {
-            mPhoneField.setText(lastLoginPhone);
-            mPhone = lastLoginPhone;
-        }
-
         mPasswordField.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int count) {
                 mPassword = c.toString();
@@ -96,6 +95,19 @@ public class LoginFragment extends BaseFragment {
             }
         });
 
+        mPasswordConfirmField.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence c, int start, int before, int count) {
+                mPasswordConfirm = c.toString();
+            }
+
+            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
+            }
+
+            public void afterTextChanged(Editable c) {
+            }
+        });
+
+        mSubmitButton.setIndeterminateProgressMode(true);
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -107,41 +119,45 @@ public class LoginFragment extends BaseFragment {
                     Toast.makeText(getActivity(), "密码不能为空！", Toast.LENGTH_SHORT).show();
                 } else if (mPassword.length() > 30) {
                     Toast.makeText(getActivity(), "密码不能多于30个字符！", Toast.LENGTH_SHORT).show();
+                } else if (mPasswordConfirm == null || mPasswordConfirm.equals("")) {
+                    Toast.makeText(getActivity(), "密码确认不能为空！", Toast.LENGTH_SHORT).show();
+                } else if (mPasswordConfirm.length() > 30) {
+                    Toast.makeText(getActivity(), "密码确认不能多于30个字符！", Toast.LENGTH_SHORT).show();
+                } else if (!mPasswordConfirm.equals(mPassword)) {
+                    Toast.makeText(getActivity(), "两次输入的密码不一致！", Toast.LENGTH_SHORT).show();
                 } else {
 
+                    AVUser mUser = new AVUser();
+                    mUser.setUsername(mPhone.trim());
+                    mUser.setPassword(mPassword);
+                    mUser.setMobilePhoneNumber(mPhone.trim());
+                    mUser.put("status", mStatus);
+                    mUser.put("tag", mTag);
+
                     mProgressDialog =
-                            ProgressDialog.show(getActivity(), "", "正在登陆，请稍候...", true);
-                    AVUser.loginByMobilePhoneNumber(mPhone, mPassword).subscribe(new Observer<AVUser>() {
+                            ProgressDialog.show(getActivity(), "", "正在注册，请稍候...", true);
+
+                    mUser.signUpInBackground().subscribe(new Observer<AVUser>() {
                         public void onSubscribe(Disposable disposable) {}
                         public void onNext(AVUser user) {
-                            // 登录成功
+                            // 注册成功
                             mProgressDialog.dismiss();
-                            mPush.setPhone(mPhone);
-                            mPush.setPassword(mPassword);
-                            User.updateLocalParams(getActivity());
-                            Log.d(TAG, "User login successfully.");
-                            Toast.makeText(getActivity(), "登陆成功", Toast.LENGTH_SHORT).show();
-                            popBackStack();
+                            mSubmitButton.setProgress(100);
+                            Log.d(TAG, "User signup successfully.");
+                            mPush.setVerifiedPhone(mPhone.trim());
+//                                Toast.makeText(getActivity(), "注册成功", Toast.LENGTH_SHORT).show();
+                            startFragment(new PhoneVerifyFragment());
                         }
                         public void onError(Throwable throwable) {
-                            // 登录失败（可能是密码错误）
-                            String msg = throwable.getMessage().toLowerCase();
-                            if (msg.equals("mobile phone number isn't verified.")) {
-                                mPush.setVerifiedPhone(mPhone.trim());
-                                AVUser.requestMobilePhoneVerifyInBackground(mPhone.trim()).blockingSubscribe();
-                                Toast.makeText(getActivity(), "请先验证该手机号码！", Toast.LENGTH_SHORT).show();
-                                startFragment(new PhoneVerifyFragment());
-                            } else {
-                                Toast.makeText(getActivity(), "手机号码或者密码不正确！", Toast.LENGTH_SHORT).show();
-                                Log.e(TAG, "User login failed:" + throwable.getMessage());
-                            }
+                            // 注册失败（通常是因为用户名已被使用）
+                            Toast.makeText(getActivity(), "手机号码已被注册！", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "User signup failed: " + throwable.getMessage());
                         }
                         public void onComplete() {}
                     });
-
-
                 }
             }
         });
+
     }
 }

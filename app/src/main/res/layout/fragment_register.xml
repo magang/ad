@@ -9,7 +9,6 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:layout_marginTop="?attr/qmui_topbar_height"
-        android:background="?attr/qmui_skin_support_color_background"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:focusableInTouchMode="true">
@@ -18,35 +17,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
 
             <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/login_phone"
+                android:id="@+id/register_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login_phone_label"
-                app:met_floatingLabel="highlight"
-                app:met_baseColor="#0056d3"
-                app:met_primaryColor="#982360"
-                app:met_errorColor="#ddaa00"
-                android:text="" />
-
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/login_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/login_password_label"
+                android:hint="@string/register_phone_label"
                 android:text=""
+                android:textCursorDrawable="@drawable/text_cursor_cyan"
                 app:met_floatingLabel="highlight"
                 app:met_baseColor="#0056d3"
                 app:met_primaryColor="#982360"
                 app:met_errorColor="#ddaa00"
-                android:inputType="textPassword" />
+                app:met_maxCharacters="11"
+                app:met_singleLineEllipsis="true" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/register_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/register_password_label"
+                android:text=""
+                android:inputType="textPassword"
+                android:textCursorDrawable="@drawable/text_cursor_cyan"
+                app:met_floatingLabel="highlight"
+                app:met_baseColor="#0056d3"
+                app:met_primaryColor="#982360"
+                app:met_errorColor="#ddaa00"
+                app:met_maxCharacters="30"
+                app:met_singleLineEllipsis="true"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/register_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/register_password_confirm_label"
+                android:text=""
+                android:inputType="textPassword"
+                android:textCursorDrawable="@drawable/text_cursor_cyan"
+                app:met_floatingLabel="highlight"
+                app:met_baseColor="#0056d3"
+                app:met_primaryColor="#982360"
+                app:met_errorColor="#ddaa00"
+                app:met_maxCharacters="30"
+                app:met_singleLineEllipsis="true"/>
 
         </LinearLayout>
 
         <com.chanlin.ad.view.button.CircularProgressButton
-            android:id="@+id/login_submit"
+            android:id="@+id/register_submit"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
@@ -56,9 +79,9 @@
             android:textColor="@color/cpb_white"
             android:textSize="18sp"
             app:cpb_cornerRadius="8dp"
-            app:cpb_textIdle="@string/login_submit_label"
-            app:cpb_textComplete="@string/login_submit_label"
-            app:cpb_textError="@string/login_submit_label" />
+            app:cpb_textIdle="@string/register_submit_label"
+            app:cpb_textComplete="@string/register_submit_label"
+            app:cpb_textError="@string/register_submit_label" />
 
     </LinearLayout>
 
@@ -69,4 +92,3 @@
         android:fitsSystemWindows="true"/>
 
 </com.qmuiteam.qmui.widget.QMUIWindowInsetLayout>
-
