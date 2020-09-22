@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.chanlin.ad.R;
 import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.config.PushConfig;
+import com.chanlin.ad.fragment.home.HomeFragment;
 import com.chanlin.ad.view.button.CircularProgressButton;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
 
@@ -24,6 +25,8 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 public class PhoneVerifyFragment extends BaseFragment {
+    public static final String TAG = PhoneVerifyFragment.class.getName();
+
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
 
@@ -36,7 +39,6 @@ public class PhoneVerifyFragment extends BaseFragment {
     @BindView(R.id.phone_verify_submit)
     CircularProgressButton mSubmitButton;
 
-    public static final String TAG = PhoneVerifyFragment.class.getName();
     private String mCode;
     private String mPhone;
     private Dialog mProgressDialog;
@@ -58,7 +60,7 @@ public class PhoneVerifyFragment extends BaseFragment {
         mTopBar.addLeftBackImageButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popBackStack();
+                popBackStack(HomeFragment.class);
             }
         });
 
@@ -124,6 +126,7 @@ public class PhoneVerifyFragment extends BaseFragment {
                         }
                         public void onError(Throwable throwable) {
                             // 验证码不正确
+                            mProgressDialog.dismiss();
                             Toast.makeText(getActivity(), "验证码错误，请重试！", Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "Phone verify failed:" + throwable.getMessage());
                         }

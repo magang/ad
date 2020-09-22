@@ -185,6 +185,7 @@ public class User {
 
     public static void syncUser() {
         currUser = AVUser.getCurrentUser();
+
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.increment("coin", 0.0);
@@ -194,18 +195,10 @@ public class User {
             currUser.increment("rank", 0);
             currUser.increment("shop", 0);
             currUser.increment("inviteNum", 0);
-            // currUser.increment("selfShop", 0);
             currUser.increment("adEnd", 0);
             currUser.increment("memberEnd", 0);
+            currUser.setFetchWhenSave(true);
             currUser.saveInBackground();
-//            currUser.saveInBackground(new SaveCallback() {
-//                public void done(AVException e) {
-//                    if (e == null) {
-//                        // calCredit();
-//                        syncRank();
-//                    }
-//                }
-//            });
         }
     }
 

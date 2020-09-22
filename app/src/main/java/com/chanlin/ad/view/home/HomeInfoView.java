@@ -12,7 +12,6 @@ import com.chanlin.ad.config.PushConfig;
 import com.chanlin.ad.data.User;
 import com.chanlin.ad.fragment.AccountFragment;
 import com.chanlin.ad.fragment.LoginFragment;
-import com.chanlin.ad.fragment.QDAboutFragment;
 import com.chanlin.ad.fragment.RegisterFragment;
 import com.chanlin.ad.listener.HomeViewListener;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
@@ -29,6 +28,7 @@ import butterknife.ButterKnife;
  * @author dustforest
  */
 public class HomeInfoView extends QMUIWindowInsetLayout {
+    private static final String TAG = HomeInfoView.class.getName();
 
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
@@ -63,13 +63,13 @@ public class HomeInfoView extends QMUIWindowInsetLayout {
     private void initTopBar() {
         mTopBar.setTitle("账户");
 
-        mTopBar.addRightImageButton(R.mipmap.icon_topbar_about, R.id.topbar_right_about_button).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                QDAboutFragment fragment = new QDAboutFragment();
-                startFragment(fragment);
-            }
-        });
+//        mTopBar.addRightImageButton(R.mipmap.icon_topbar_about, R.id.topbar_right_about_button).setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                QDAboutFragment fragment = new QDAboutFragment();
+//                startFragment(fragment);
+//            }
+//        });
     }
 
     private void initGroupListView() {

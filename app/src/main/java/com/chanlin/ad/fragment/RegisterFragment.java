@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.chanlin.ad.R;
 import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.config.PushConfig;
+import com.chanlin.ad.fragment.home.HomeFragment;
 import com.chanlin.ad.view.button.CircularProgressButton;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
 
@@ -23,6 +24,8 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 public class RegisterFragment extends BaseFragment {
+    public static final String TAG = RegisterFragment.class.getName();
+
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
 
@@ -38,7 +41,6 @@ public class RegisterFragment extends BaseFragment {
     @BindView(R.id.register_submit)
     CircularProgressButton mSubmitButton;
 
-    public static final String TAG = RegisterFragment.class.getName();
     private String mPassword;
     private String mPasswordConfirm;
     private String mPhone;
@@ -63,7 +65,7 @@ public class RegisterFragment extends BaseFragment {
         mTopBar.addLeftBackImageButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popBackStack();
+                popBackStack(HomeFragment.class);
             }
         });
 
@@ -150,6 +152,7 @@ public class RegisterFragment extends BaseFragment {
                         }
                         public void onError(Throwable throwable) {
                             // 注册失败（通常是因为用户名已被使用）
+                            mProgressDialog.dismiss();
                             Toast.makeText(getActivity(), "手机号码已被注册！", Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "User signup failed: " + throwable.getMessage());
                         }

@@ -15,6 +15,7 @@ import com.chanlin.ad.R;
 import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.config.PushConfig;
 import com.chanlin.ad.data.User;
+import com.chanlin.ad.fragment.home.HomeFragment;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
 
 import butterknife.BindView;
@@ -24,6 +25,8 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 public class LoginFragment extends BaseFragment {
+    public static final String TAG = LoginFragment.class.getName();
+
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
 
@@ -36,7 +39,6 @@ public class LoginFragment extends BaseFragment {
     @BindView(R.id.login_submit)
     Button mSubmitButton;
 
-    public static final String TAG = "LoginFragment";
     private String mPassword;
     private String mPhone;
     private Dialog mProgressDialog;
@@ -58,7 +60,14 @@ public class LoginFragment extends BaseFragment {
         mTopBar.addLeftBackImageButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popBackStack();
+                popBackStack(HomeFragment.class);
+            }
+        });
+
+        mTopBar.addRightTextButton("注册", R.id.topbar_right_register_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startFragment(new RegisterFragment());
             }
         });
 
@@ -121,10 +130,11 @@ public class LoginFragment extends BaseFragment {
                             User.updateLocalParams(getActivity());
                             Log.d(TAG, "User login successfully.");
                             Toast.makeText(getActivity(), "登陆成功", Toast.LENGTH_SHORT).show();
-                            popBackStack();
+                            popBackStack(HomeFragment.class);
                         }
                         public void onError(Throwable throwable) {
                             // 登录失败（可能是密码错误）
+                            mProgressDialog.dismiss();
                             String msg = throwable.getMessage().toLowerCase();
                             if (msg.equals("mobile phone number isn't verified.")) {
                                 mPush.setVerifiedPhone(mPhone.trim());

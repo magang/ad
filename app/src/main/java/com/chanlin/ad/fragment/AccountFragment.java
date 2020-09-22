@@ -15,6 +15,8 @@ import butterknife.ButterKnife;
 import cn.leancloud.AVUser;
 
 public class AccountFragment extends BaseFragment {
+    public static final String TAG = AccountFragment.class.getName();
+
     @BindView(R.id.topbar)
     QMUITopBarLayout mTopBar;
 
@@ -30,7 +32,6 @@ public class AccountFragment extends BaseFragment {
     @BindView(R.id.tv_ticket_value)
     TextView mTicketField;
 
-    public static final String TAG = AccountFragment.class.getName();
     private PushConfig mPush;
     private AVUser currUser;
 
