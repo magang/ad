@@ -99,6 +99,7 @@ public class HomeInfoView extends QMUIWindowInsetLayout {
                             startFragment(new LoginFragment());
                             break;
                         case "账户":
+                            User.syncUser();
                             startFragment(new AccountFragment());
                             break;
                         case "退出登录":

@@ -10,23 +10,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.leancloud.AVFile;
+import cn.leancloud.AVObject;
+import cn.leancloud.AVSaveOption;
 import cn.leancloud.AVUser;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class User {
+    private static final String TAG = User.class.getName();
+
     private static AVUser currUser;
     private static int userCredit = 0;
 
     private static int getQuality(Context ctx) {
-        int quality;
-//        if (Network.isWifi(ctx)) {
-//            quality = PushConfig.get(ctx).getWifiImageQuality();
-//        } else {
-//            quality = PushConfig.get(ctx).getImageQuality();
-//        }
-
-        quality = PushConfig.get(ctx).getWifiImageQuality();
-
-        return quality;
+        return PushConfig.get(ctx).getWifiImageQuality();
     }
 
     private static String getImageThumbnailUrlBase(Context ctx, int width, int height) {
@@ -101,31 +98,12 @@ public class User {
         }
     }
 
-    public static void relogin(Context ctx) {
-//        String username = PushConfig.get(ctx).getPhone();
-//        String pwd = PushConfig.get(ctx).getPassword();
-//        if (username.equals("") || pwd.equals("")) {
-//            Intent i = new Intent(ctx, LoginActivity.class);
-//            ctx.startActivity(i);
-//            return;
-//        }
-//
-//        AVUser.loginByMobilePhoneNumberInBackground(username, pwd, new LogInCallback() {
-//            public void done(AVUser user, AVException e) {
-//                if (e == null) {
-//                    RongyunToken.getTokenInBackground();
-//                } else {
-//                }
-//            }
-//        });
-    }
-
     public static void addCoin(int val) {
         currUser = AVUser.getCurrentUser();
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.increment("coin", val);
-            currUser.saveInBackground();
+            save();
         }
     }
 
@@ -134,7 +112,7 @@ public class User {
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.increment("ticket", val);
-            currUser.saveInBackground();
+            save();
         }
     }
 
@@ -143,7 +121,7 @@ public class User {
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.increment("xjc", val);
-            currUser.saveInBackground();
+            save();
         }
     }
 
@@ -152,7 +130,7 @@ public class User {
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.increment("coin", 0);
-            currUser.saveInBackground();
+            save();
         }
     }
 
@@ -161,7 +139,7 @@ public class User {
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.increment("report", 0);
-            currUser.saveInBackground();
+            save();
         }
     }
 
@@ -170,7 +148,7 @@ public class User {
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.put("lastLoginDate", date);
-            currUser.saveInBackground();
+            save();
         }
     }
 
@@ -179,27 +157,43 @@ public class User {
         if (currUser != null) {
             currUser.setFetchWhenSave(true);
             currUser.put("xjcAddress", address);
-            currUser.saveInBackground();
+            save();
         }
+    }
+
+    private static AVSaveOption getSaveOption() {
+        AVSaveOption option = new AVSaveOption();
+        option.setFetchWhenSave(true);
+        return option;
     }
 
     public static void syncUser() {
         currUser = AVUser.getCurrentUser();
-
         if (currUser != null) {
-            currUser.setFetchWhenSave(true);
+            Log.d(TAG, "sync user...");
+            Log.d(TAG, "current user:" + currUser.toString());
+
             currUser.increment("coin", 0.0);
             currUser.increment("xjc", 0.0);
             currUser.increment("ticket", 0.0);
             currUser.increment("report", 0);
             currUser.increment("rank", 0);
-            currUser.increment("shop", 0);
-            currUser.increment("inviteNum", 0);
-            currUser.increment("adEnd", 0);
-            currUser.increment("memberEnd", 0);
-            currUser.setFetchWhenSave(true);
-            currUser.saveInBackground();
+            save();
         }
+    }
+
+    public static void save() {
+        currUser.setFetchWhenSave(true);
+        currUser.saveInBackground().subscribe(new Observer<AVObject>() {
+            public void onSubscribe(Disposable disposable) {}
+            public void onNext(AVObject avUser) {
+                Log.d(TAG, "current user: " + currUser.toString());
+            }
+            public void onError(Throwable throwable) {
+            }
+            public void onComplete() {}
+        });
+
     }
 
     public static void calCredit() {
@@ -254,19 +248,19 @@ public class User {
                 if (isVip() || isShop()) {
                     currUser.put("vip", false);
                     currUser.put("shop", 0);
-                    currUser.saveInBackground();
+                    save();
                 }
             } else if (rank == 4) {
                 if (!isVip()) {
                     currUser.put("vip", true);
                     currUser.put("shop", 0);
-                    currUser.saveInBackground();
+                    save();
                 }
             } else if (rank == 5) {
                 if (!isShop()) {
                     currUser.put("vip", false);
                     currUser.put("shop", 1);
-                    currUser.saveInBackground();
+                    save();
                 }
             } else if (isMemberUser()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -280,7 +274,7 @@ public class User {
                     currUser.setFetchWhenSave(true);
                     currUser.put("rank", getRank());
                     currUser.put("memberEnd", 0);
-                    currUser.saveInBackground();
+                    save();
                 }
             } else if (isAdUser()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -294,12 +288,12 @@ public class User {
                     currUser.setFetchWhenSave(true);
                     currUser.put("rank", getRank());
                     currUser.put("adEnd", 0);
-                    currUser.saveInBackground();
+                    save();
                 }
             } else if (isReportUnlimitedRank()) {
                 currUser.put("vip", false);
                 currUser.put("shop", 0);
-                currUser.saveInBackground();
+                save();
             }
         }
     }
@@ -361,7 +355,7 @@ public class User {
         currUser = AVUser.getCurrentUser();
         if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
             currUser.put("selfShop", val);
-            currUser.saveInBackground();
+            save();
         }
     }
 
