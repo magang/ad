@@ -79,7 +79,8 @@ public class AccountFragment extends BaseFragment {
 
             int rank = currUser.getInt("rank");
             if (rank == 3) {
-                strStatus = "普通会员";
+//                strStatus = "普通会员";
+                strStatus = "正常";
             } else if (rank == 4) {
                 strStatus = "高级会员"  + memberEnd;
             } else if (rank == 5) {
@@ -102,7 +103,7 @@ public class AccountFragment extends BaseFragment {
                 strStatus = "禁言";
             }
 
-            strPhone = currUser.getString("mobilePhoneNumber");
+            strPhone = currUser.getString("mobilePhoneNumber") + "（" + strPhoneVerified + "）";
             strXjc = String.format("%.3f", currUser.getDouble("xjc"));
             strTicket = String.format("%.0f", currUser.getDouble("ticket"));
         }
