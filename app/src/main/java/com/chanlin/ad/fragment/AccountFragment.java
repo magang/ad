@@ -55,7 +55,7 @@ public class AccountFragment extends BaseFragment {
             }
         });
 
-        mTopBar.setTitle("账户");
+        mTopBar.setTitle("我的账户");
     }
 
     private void initView() {
