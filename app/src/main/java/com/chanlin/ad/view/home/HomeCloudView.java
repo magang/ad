@@ -375,7 +375,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                         } else if (Double.parseDouble(mVote) <= 0) {
                                             Toast.makeText(mContext, "投票数量不能为零！", Toast.LENGTH_SHORT).show();
                                         } else if (Double.parseDouble(mVote) > currUser.getDouble("ticket")) {
-                                            Toast.makeText(mContext, "选票余额不足！", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(mContext, "投票券不足！", Toast.LENGTH_SHORT).show();
                                         } else {
                                             String mLocal = "null";
                                             String mLocalName = "";
@@ -413,7 +413,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                                 public void onComplete() {}
                                             });
 
-                                            Toast.makeText(mContext, "投票成功！", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(mContext, "投票成功", Toast.LENGTH_SHORT).show();
                                             dialog.dismiss();
 
 //                                            final QMUITipDialog tipDialog;
