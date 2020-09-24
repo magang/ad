@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Parcelable;
-import android.text.InputType;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -44,7 +43,6 @@ import com.qmuiteam.qmui.util.QMUIViewHelper;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
 import com.qmuiteam.qmui.widget.QMUIWindowInsetLayout;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
-import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.qmuiteam.qmui.widget.pullRefreshLayout.QMUIPullRefreshLayout;
 
 import java.util.ArrayList;
@@ -345,23 +343,31 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                         User.syncUser();
 
                         int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
-                        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(mContext);
-                        builder.setTitle("投票")
+                        final String[] items = new String[]{"1 票", "2 票", "5 票", "10 票"};
+                        new QMUIDialog.MenuDialogBuilder(mContext)
                                 .setSkinManager(QMUISkinManager.defaultInstance(getContext()))
-                                .setPlaceholder("投票数量")
-                                .setInputType(InputType.TYPE_CLASS_TEXT)
-                                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                                .addItems(items, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(QMUIDialog dialog, int index) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .addAction("确定", new QMUIDialogAction.ActionListener() {
-                                    @Override
-                                    public void onClick(QMUIDialog dialog, int index) {
-                                        String mVote = builder.getEditText().getText().toString();
-                                        AVUser currUser = AVUser.getCurrentUser();
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String mVote = "";
+                                        switch (which) {
+                                            case 0:
+                                                mVote = "1";
+                                                break;
+                                            case 1:
+                                                mVote = "2";
+                                                break;
+                                            case 2:
+                                                mVote = "5";
+                                                break;
+                                            case 3:
+                                                mVote = "10";
+                                                break;
+                                            default:
+                                                break;
+                                        }
 
+                                        AVUser currUser = AVUser.getCurrentUser();
                                         if (mVote == null || mVote.equals("")) {
                                             Toast.makeText(mContext, "投票数量不能为空！", Toast.LENGTH_SHORT).show();
                                         } else if (!isInteger(mVote) && !isDouble(mVote) ) {
@@ -396,7 +402,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
 
                                             vote.saveInBackground().subscribe(new Observer<AVObject>() {
                                                 public void onSubscribe(Disposable disposable) {}
-                                                public void onNext(AVObject todo) {
+                                                public void onNext(AVObject avObject) {
                                                     // 成功保存之后，执行其他逻辑
                                                     Log.d(TAG, "Vote successfully.");
                                                 }
@@ -425,8 +431,79 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                             fetchData(true);
                                         }
                                     }
-                                })
-                                .create(mCurrentDialogStyle).show();
+                                }).create(mCurrentDialogStyle).show();
+
+
+//                        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(mContext);
+//                        builder.setTitle("投票")
+//                                .setSkinManager(QMUISkinManager.defaultInstance(getContext()))
+//                                .setPlaceholder("投票数量")
+//                                .setInputType(InputType.TYPE_CLASS_TEXT)
+//                                .addAction("取消", new QMUIDialogAction.ActionListener() {
+//                                    @Override
+//                                    public void onClick(QMUIDialog dialog, int index) {
+//                                        dialog.dismiss();
+//                                    }
+//                                })
+//                                .addAction("确定", new QMUIDialogAction.ActionListener() {
+//                                    @Override
+//                                    public void onClick(QMUIDialog dialog, int index) {
+//                                        String mVote = builder.getEditText().getText().toString();
+//                                        AVUser currUser = AVUser.getCurrentUser();
+//
+//                                        if (mVote == null || mVote.equals("")) {
+//                                            Toast.makeText(mContext, "投票数量不能为空！", Toast.LENGTH_SHORT).show();
+//                                        } else if (!isInteger(mVote) && !isDouble(mVote) ) {
+//                                            Toast.makeText(mContext, "投票数量必须是数字！", Toast.LENGTH_SHORT).show();
+//                                        } else if (Double.parseDouble(mVote) <= 0) {
+//                                            Toast.makeText(mContext, "投票数量不能为零！", Toast.LENGTH_SHORT).show();
+//                                        } else if (Double.parseDouble(mVote) > currUser.getDouble("ticket")) {
+//                                            Toast.makeText(mContext, "选票余额不足！", Toast.LENGTH_SHORT).show();
+//                                        } else {
+//                                            String mLocal = "null";
+//                                            String mLocalName = "";
+//                                            String mPeer = "";
+//                                            String mPeerName = "";
+//                                            mPeer = item.getUser();
+//                                            mPeerName = item.getUserName();
+//
+//                                            final AVObject vote = new AVObject("Vote");
+//                                            vote.put("status", "submit");
+//                                            vote.put("to", mPeer.trim());
+//                                            vote.put("toName", mPeerName);
+//                                            vote.put("item", item.getObjectId());
+//                                            vote.put("votes", Double.parseDouble(mVote));
+//                                            vote.put("score", Double.parseDouble("10"));
+//
+//                                            if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
+//                                                mLocal = currUser.getString("mobilePhoneNumber");
+//                                                mLocalName = currUser.getString("nickname");
+//                                            }
+//
+//                                            vote.put("from", mLocal.trim());
+//                                            vote.put("fromName", mLocalName);
+//
+//                                            vote.saveInBackground().subscribe(new Observer<AVObject>() {
+//                                                public void onSubscribe(Disposable disposable) {}
+//                                                public void onNext(AVObject avObject) {
+//                                                    // 成功保存之后，执行其他逻辑
+//                                                    Log.d(TAG, "Vote successfully.");
+//                                                }
+//                                                public void onError(Throwable throwable) {
+//                                                    // 异常处理
+//                                                    Log.e(TAG, "Vote failed: " + throwable.getMessage());
+//                                                }
+//                                                public void onComplete() {}
+//                                            });
+//
+//                                            Toast.makeText(mContext, "投票成功！", Toast.LENGTH_SHORT).show();
+//                                            dialog.dismiss();
+//
+//                                            fetchData(true);
+//                                        }
+//                                    }
+//                                })
+//                                .create(mCurrentDialogStyle).show();
                     }
                 });
 
@@ -441,18 +518,17 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 deleteButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-//                        if (!User.isLoggedIn()) {
-//                            Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
-//                            Intent i = new Intent(mContext, LoginActivity.class);
-//                            startActivity(i);
-//                            return;
-//                        }
-//
-//                        if (User.isBadUser(mContext, true)) {
-//                            return;
-//                        }
+                        if (!User.isLoggedIn()) {
+                            Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
+                            startFragment(new LoginFragment());
+                            return;
+                        }
 
-//                        User.syncUser();
+                        if (User.isBadUser(mContext, true)) {
+                            return;
+                        }
+
+                        User.syncUser();
 
                         if (!item.isOn()) {
                             Toast.makeText(mContext, "该条目已被投诉，无法删除！", Toast.LENGTH_SHORT).show();
@@ -469,7 +545,6 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                         mProgressDialog.dismiss();
                                         Toast.makeText(mContext, "已删除", Toast.LENGTH_SHORT).show();
                                         TradeLab.get(mContext).removeItemFromTrades(item.getObjectId());
-//                                        mPush.needRefresh(false);
                                         fetchData(false);
                                     }
                                 })
@@ -492,7 +567,6 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                         mPush.addGlobalAdIgnores(item.getObjectId());
                         Toast.makeText(mContext, "已忽略", Toast.LENGTH_SHORT).show();
                         TradeLab.get(mContext).removeItemFromTrades(item.getObjectId());
-//                        mPush.needRefresh(false);
                         fetchData(false);
                     }
                 });
