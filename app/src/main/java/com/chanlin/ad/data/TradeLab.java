@@ -119,9 +119,13 @@ public class TradeLab {
                 mTrades = findGlobalAds(15, 1);
                 break;
             case 1:
+            case 2:
+            case 3:
                 mTrades = findHotTrades(100, 1);
                 break;
-            case 2:
+            case 4:
+            case 5:
+            case 6:
                 mTrades = findNewTrades(100, 1);
                 break;
             default:
