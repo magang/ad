@@ -187,6 +187,7 @@
     <string name="trade_manage">管理</string>
     <string name="trade_more">更多</string>
     <string name="trade_like">投票</string>
+    <string name="trade_next">下一条</string>
     <string name="trade_comment">评论</string>
     <string name="trade_chat">聊天</string>
     <string name="trade_group_chat">群聊</string>

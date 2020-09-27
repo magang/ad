@@ -116,10 +116,6 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
         }
     }
 
-    private void fetchData () {
-        new RemoteDataTask().execute();
-    }
-
     private void fetchData (boolean needRefresh) {
         mPush.needRefresh(needRefresh);
         new RemoteDataTask().execute();
@@ -180,6 +176,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 ImageView tradeUserPhoto = (ImageView)holder.getView(R.id.user_image);
                 Button stickButton = (Button) holder.getView(R.id.btn_stick);
                 Button likeButton = (Button) holder.getView(R.id.btn_like);
+                Button nextButton = (Button) holder.getView(R.id.btn_next);
                 Button closeButton = (Button) holder.getView(R.id.btn_close);
                 Button deleteButton = (Button) holder.getView(R.id.btn_delete);
                 Button reportButton = (Button) holder.getView(R.id.btn_report);
@@ -188,8 +185,16 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 userName.setText(item.getUserName());
                 tradeAge.setText(item.getAge());
 
+                // 投票
+                String voteStr = "";
+                long voteNum = item.getVoteCount();
+                if (voteNum > 10000) {
+                    voteStr = String.format("%.1f", voteNum / 10000.0) + " 万";
+                } else {
+                    voteStr += voteNum;
+                }
                 String btnLikeText = item.getVoteCount() == 0 ? mContext.getString(R.string.trade_like) :
-                        mContext.getString(R.string.trade_like) + "（" + item.getVoteCount() + "）";
+                        mContext.getString(R.string.trade_like) + "（" + voteStr + "）";
                 likeButton.setText(btnLikeText);
 
                 // 重置所有元素
@@ -237,7 +242,8 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                     deleteButton.setVisibility(View.GONE);
                     reportButton.setVisibility(View.GONE);
                     closeButton.setVisibility(View.GONE);
-                    adImage.setVisibility(View.VISIBLE);
+//                    adImage.setVisibility(View.VISIBLE);
+                    tradeDetails.setText("〔广告〕" + item.getDetails());
                 }
 
                 // 用户头像
@@ -323,6 +329,14 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 stickButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
+                    }
+                });
+
+                // 下一条按钮
+                nextButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        fetchData(true);
                     }
                 });
 
@@ -594,7 +608,6 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 mPullRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        mPush.needRefresh(true);
                         fetchData(true);
                         mPullRefreshLayout.finishRefresh();
                     }

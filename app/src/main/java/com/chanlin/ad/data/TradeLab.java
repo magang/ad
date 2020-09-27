@@ -107,7 +107,7 @@ public class TradeLab {
             return getCachedTrades();
         }
 
-        mTrades = findGlobalAds(10, 1);
+        mTrades = findGlobalAds(15, 1);
         if (!mTrades.isEmpty()) {
             return mTrades;
         }
@@ -126,7 +126,6 @@ public class TradeLab {
         mIndex = mIndex % 2;
 
         return mTrades;
-
 
 //        List<Trade> items = new ArrayList<>();
 //        items.addAll(findGlobalAds(100, 100));

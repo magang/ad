@@ -324,8 +324,8 @@ public class Trade extends AVObject {
         return this.getBoolean(NAV_ENABLED_KEY);
     }
 
-    public int getVoteCount() {
-        return (int) (this.getDouble(VOTE_COUNT_KEY));
+    public long getVoteCount() {
+        return (long) (this.getDouble(VOTE_COUNT_KEY));
     }
 
     public void incrVoteCount(double num) {
