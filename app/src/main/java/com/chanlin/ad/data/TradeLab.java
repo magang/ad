@@ -103,27 +103,33 @@ public class TradeLab {
     public List<Trade> findTrades() {
         Log.i(TAG, "findTrades...");
 
+        int categoryNum = 3;
+
         if (!mPush.isRefreshNeeded()) {
             return getCachedTrades();
         }
 
-        mTrades = findGlobalAds(15, 1);
-        if (!mTrades.isEmpty()) {
-            return mTrades;
-        }
+//        mTrades = findGlobalAds(15, 1);
+//        if (!mTrades.isEmpty()) {
+//            return mTrades;
+//        }
 
         switch (mIndex) {
             case 0:
-                mTrades = findHotTrades(100, 1);
+                mTrades = findGlobalAds(15, 1);
                 break;
             case 1:
-            default:
+                mTrades = findHotTrades(100, 1);
+                break;
+            case 2:
                 mTrades = findNewTrades(100, 1);
+                break;
+            default:
                 break;
         }
 
         mIndex++;
-        mIndex = mIndex % 2;
+        mIndex = mIndex % categoryNum;
 
         return mTrades;
 
@@ -201,9 +207,9 @@ public class TradeLab {
         query.limit(poolSize);
 
         List<Trade> items = getRandomItems(query, num);
-        for (Trade item : items) {
-            mPush.addGlobalAdIgnores(item.getObjectId());
-        }
+//        for (Trade item : items) {
+//            mPush.addGlobalAdIgnores(item.getObjectId());
+//        }
 
         return items;
     }
