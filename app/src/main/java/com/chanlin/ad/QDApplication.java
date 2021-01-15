@@ -90,11 +90,13 @@ public class QDApplication extends MultiDexApplication {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if ((newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-            QDSkinManager.changeSkin(QDSkinManager.SKIN_DARK);
-        } else if (QDSkinManager.getCurrentSkin() == QDSkinManager.SKIN_DARK) {
-            QDSkinManager.changeSkin(QDSkinManager.SKIN_BLUE);
-        }
+//        if ((newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+//            QDSkinManager.changeSkin(QDSkinManager.SKIN_DARK);
+//        } else if (QDSkinManager.getCurrentSkin() == QDSkinManager.SKIN_DARK) {
+//            QDSkinManager.changeSkin(QDSkinManager.SKIN_BLUE);
+//        }
+
+        QDSkinManager.changeSkin(QDSkinManager.SKIN_BLUE);
     }
 
     public static void initImageLoader(Context context) throws IOException {

@@ -104,7 +104,7 @@ public class AccountFragment extends BaseFragment {
             }
 
             strPhone = currUser.getString("mobilePhoneNumber") + "（" + strPhoneVerified + "）";
-            strXjc = String.format("%.0f", currUser.getDouble("xjc")) + " 元";
+            strXjc = String.format("%.0f", currUser.getDouble("xjc"));
             strTicket = String.format("%.0f", currUser.getDouble("ticket")) + " 张";
         }
 
