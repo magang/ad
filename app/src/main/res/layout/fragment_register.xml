@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:layout_marginTop="?attr/qmui_topbar_height"
+        android:background="?attr/qmui_skin_support_color_background"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:focusableInTouchMode="true">
