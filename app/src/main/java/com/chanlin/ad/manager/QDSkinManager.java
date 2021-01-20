@@ -16,7 +16,6 @@
 package com.chanlin.ad.manager;
 
 import android.content.Context;
-import android.content.res.Configuration;
 
 import com.chanlin.ad.QDApplication;
 import com.chanlin.ad.R;
@@ -32,16 +31,18 @@ public class QDSkinManager {
         skinManager.addSkin(SKIN_BLUE, R.style.app_skin_blue);
         skinManager.addSkin(SKIN_DARK, R.style.app_skin_dark);
         skinManager.addSkin(SKIN_WHITE, R.style.app_skin_white);
-        boolean isDarkMode = (context.getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-        int storeSkinIndex = QDPreferenceManager.getInstance(context).getSkinIndex();
-        if (isDarkMode && storeSkinIndex != SKIN_DARK) {
-            skinManager.changeSkin(SKIN_DARK);
-        } else if (!isDarkMode && storeSkinIndex == SKIN_DARK) {
-            skinManager.changeSkin(SKIN_BLUE);
-        }else{
-            skinManager.changeSkin(storeSkinIndex);
-        }
+//        boolean isDarkMode = (context.getResources().getConfiguration().uiMode
+//                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+//        int storeSkinIndex = QDPreferenceManager.getInstance(context).getSkinIndex();
+//        if (isDarkMode && storeSkinIndex != SKIN_DARK) {
+//            skinManager.changeSkin(SKIN_DARK);
+//        } else if (!isDarkMode && storeSkinIndex == SKIN_DARK) {
+//            skinManager.changeSkin(SKIN_BLUE);
+//        } else {
+//            skinManager.changeSkin(storeSkinIndex);
+//        }
+
+        skinManager.changeSkin(SKIN_BLUE);
     }
     public static void changeSkin(int index) {
         QMUISkinManager.defaultInstance(QDApplication.getContext()).changeSkin(index);

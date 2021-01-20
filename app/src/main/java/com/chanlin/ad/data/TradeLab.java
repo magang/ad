@@ -30,6 +30,7 @@ public class TradeLab {
     private int mIndex = 0;
     private String latestDay = "2000-01-01";
     private int latestNewsIndex = 0;
+    private int globalAdIndex = 0;
     private final String tradesStartDate = "2021-01-01";
 
     private TradeLab(Context appContext) {
@@ -49,6 +50,7 @@ public class TradeLab {
         if (!today.equalsIgnoreCase(latestDay)) {
             latestDay = today;
             latestNewsIndex = 0;
+            globalAdIndex = 0;
         }
     }
 
@@ -126,6 +128,8 @@ public class TradeLab {
         }
 
         checkNewDay();
+
+        // 按照发布先后顺序，查看当天发布所有的消息
         mTrades = findTodayTrades(30, 1);
         if (!mTrades.isEmpty()) {
             return mTrades;
@@ -134,21 +138,27 @@ public class TradeLab {
         int categoryNum = 7;
         switch (mIndex) {
             case 0:
+                // 按照发布的先后顺序，顺序查看所有的置顶消息
                 mTrades = findGlobalAds(15, 1);
-                break;
+                if (!mTrades.isEmpty()) {
+                    break;
+                }
             case 1:
             case 2:
             case 3:
+                // 从评分最高的消息中，随机选择消息
                 mTrades = findHotestTrades(100, 1, tradesStartDate);
                 break;
             case 4:
             case 5:
             case 6:
+                // 从最近发布的消息中，随机选择消息
                 mTrades = findLatestTrades(100, 1, tradesStartDate);
                 break;
             default:
                 break;
         }
+
         mIndex++;
         mIndex = mIndex % categoryNum;
 
@@ -226,6 +236,8 @@ public class TradeLab {
         AVQuery<Trade> query = AVQuery.getQuery(Trade.TRADE_CLASS);
         query.whereEqualTo("status", "on");
         query.whereEqualTo("type", "trade");
+
+
         query.whereEqualTo("online", "online");
         query.whereGreaterThanOrEqualTo("createdAt", CommonUtils.getDateWithDateString(CommonUtils.formatDate(new Date())));
         query.orderByAscending("createdAt");
@@ -260,11 +272,19 @@ public class TradeLab {
         query.whereEqualTo("online", "online");
         query.whereLessThanOrEqualTo("adStartDate", CommonUtils.formatDate(new Date()));
         query.whereNotContainedIn("objectId", mPush.getGlobalAdIgnores());
-        query.orderByDescending("createdAt");
+        query.orderByAscending("createdAt");
         query.limit(poolSize);
-        List<Trade> items = getRandomItems(query, num);
 
-        return items;
+        try {
+            List<Trade> items = query.find();
+            Log.i(TAG, "items found: " + items.size());
+            items = items.subList(globalAdIndex, globalAdIndex + num);
+            globalAdIndex += num;
+            return items;
+        } catch (Exception exception) {
+            Log.e(TAG, "getItems error: " + exception);
+            return Collections.emptyList();
+        }
     }
 
     public void removeItemFromTrades(String id) {

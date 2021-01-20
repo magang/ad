@@ -222,20 +222,20 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
 //                }
 
                 // 管理员，可以置顶任何消息
-                if (User.isAdmin()) {
-                    stickButton.setVisibility(View.VISIBLE);
-                }
+//                if (User.isAdmin()) {
+//                    stickButton.setVisibility(View.VISIBLE);
+//                }
 
                 // 自己发布的消息，可以删除
-                AVUser currUser = AVUser.getCurrentUser();
-                if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
-                    String phone = currUser.getString("mobilePhoneNumber");
-                    if (phone.equals(item.getUser())) {
-                        deleteButton.setVisibility(View.VISIBLE);
-                        reportButton.setVisibility(View.GONE);
-                        closeButton.setVisibility(View.GONE);
-                    }
-                }
+//                AVUser currUser = AVUser.getCurrentUser();
+//                if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
+//                    String phone = currUser.getString("mobilePhoneNumber");
+//                    if (phone.equals(item.getUser())) {
+//                        deleteButton.setVisibility(View.VISIBLE);
+//                        reportButton.setVisibility(View.GONE);
+//                        closeButton.setVisibility(View.GONE);
+//                    }
+//                }
 
                 // 置顶消息，不允许举报、删除，可以忽略
                 if (item.isAd()) {
@@ -429,95 +429,10 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
 
                                             Toast.makeText(mContext, "投票成功", Toast.LENGTH_SHORT).show();
                                             dialog.dismiss();
-
-//                                            final QMUITipDialog tipDialog;
-//                                            tipDialog = new QMUITipDialog.Builder(mContext)
-//                                                    .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
-//                                                    .setTipWord("投票成功")
-//                                                    .create();
-//                                            tipDialog.show();
-//                                            postDelayed(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    tipDialog.dismiss();
-//                                                }
-//                                            }, 1500);
                                             fetchData(true);
                                         }
                                     }
                                 }).create(mCurrentDialogStyle).show();
-
-
-//                        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(mContext);
-//                        builder.setTitle("投票")
-//                                .setSkinManager(QMUISkinManager.defaultInstance(getContext()))
-//                                .setPlaceholder("投票数量")
-//                                .setInputType(InputType.TYPE_CLASS_TEXT)
-//                                .addAction("取消", new QMUIDialogAction.ActionListener() {
-//                                    @Override
-//                                    public void onClick(QMUIDialog dialog, int index) {
-//                                        dialog.dismiss();
-//                                    }
-//                                })
-//                                .addAction("确定", new QMUIDialogAction.ActionListener() {
-//                                    @Override
-//                                    public void onClick(QMUIDialog dialog, int index) {
-//                                        String mVote = builder.getEditText().getText().toString();
-//                                        AVUser currUser = AVUser.getCurrentUser();
-//
-//                                        if (mVote == null || mVote.equals("")) {
-//                                            Toast.makeText(mContext, "投票数量不能为空！", Toast.LENGTH_SHORT).show();
-//                                        } else if (!isInteger(mVote) && !isDouble(mVote) ) {
-//                                            Toast.makeText(mContext, "投票数量必须是数字！", Toast.LENGTH_SHORT).show();
-//                                        } else if (Double.parseDouble(mVote) <= 0) {
-//                                            Toast.makeText(mContext, "投票数量不能为零！", Toast.LENGTH_SHORT).show();
-//                                        } else if (Double.parseDouble(mVote) > currUser.getDouble("ticket")) {
-//                                            Toast.makeText(mContext, "选票余额不足！", Toast.LENGTH_SHORT).show();
-//                                        } else {
-//                                            String mLocal = "null";
-//                                            String mLocalName = "";
-//                                            String mPeer = "";
-//                                            String mPeerName = "";
-//                                            mPeer = item.getUser();
-//                                            mPeerName = item.getUserName();
-//
-//                                            final AVObject vote = new AVObject("Vote");
-//                                            vote.put("status", "submit");
-//                                            vote.put("to", mPeer.trim());
-//                                            vote.put("toName", mPeerName);
-//                                            vote.put("item", item.getObjectId());
-//                                            vote.put("votes", Double.parseDouble(mVote));
-//                                            vote.put("score", Double.parseDouble("10"));
-//
-//                                            if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
-//                                                mLocal = currUser.getString("mobilePhoneNumber");
-//                                                mLocalName = currUser.getString("nickname");
-//                                            }
-//
-//                                            vote.put("from", mLocal.trim());
-//                                            vote.put("fromName", mLocalName);
-//
-//                                            vote.saveInBackground().subscribe(new Observer<AVObject>() {
-//                                                public void onSubscribe(Disposable disposable) {}
-//                                                public void onNext(AVObject avObject) {
-//                                                    // 成功保存之后，执行其他逻辑
-//                                                    Log.d(TAG, "Vote successfully.");
-//                                                }
-//                                                public void onError(Throwable throwable) {
-//                                                    // 异常处理
-//                                                    Log.e(TAG, "Vote failed: " + throwable.getMessage());
-//                                                }
-//                                                public void onComplete() {}
-//                                            });
-//
-//                                            Toast.makeText(mContext, "投票成功！", Toast.LENGTH_SHORT).show();
-//                                            dialog.dismiss();
-//
-//                                            fetchData(true);
-//                                        }
-//                                    }
-//                                })
-//                                .create(mCurrentDialogStyle).show();
                     }
                 });
 
@@ -555,7 +470,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         mProgressDialog =
                                                 ProgressDialog.show(mContext, "", "正在删除，请稍候...", true);
-                                        io.reactivex.Observable<AVNull> observable =item.deleteInBackground();
+                                        io.reactivex.Observable<AVNull> observable = item.deleteInBackground();
                                         mProgressDialog.dismiss();
                                         Toast.makeText(mContext, "已删除", Toast.LENGTH_SHORT).show();
                                         TradeLab.get(mContext).removeItemFromTrades(item.getObjectId());
