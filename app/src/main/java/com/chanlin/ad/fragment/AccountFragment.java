@@ -32,6 +32,9 @@ public class AccountFragment extends BaseFragment {
     @BindView(R.id.tv_ticket_value)
     TextView mTicketField;
 
+    @BindView(R.id.tv_invite_value)
+    TextView mInviteField;
+
     private PushConfig mPush;
     private AVUser currUser;
 
@@ -64,6 +67,7 @@ public class AccountFragment extends BaseFragment {
         String strXjc = "";
         String strTicket = "";
         String strPhoneVerified = "";
+        String strInviteNum = "";
 
         currUser = AVUser.getCurrentUser();
         if (currUser != null) {
@@ -80,9 +84,10 @@ public class AccountFragment extends BaseFragment {
             int rank = currUser.getInt("rank");
             if (rank == 3) {
 //                strStatus = "普通会员";
-                strStatus = "正常";
+                strStatus = "用户";
             } else if (rank == 4) {
-                strStatus = "高级会员"  + memberEnd;
+//                strStatus = "高级会员"  + memberEnd;
+                strStatus = "会员";
             } else if (rank == 5) {
                 strStatus = "超级会员"  + memberEnd;
             } else if (rank == 6) {
@@ -104,13 +109,15 @@ public class AccountFragment extends BaseFragment {
             }
 
             strPhone = currUser.getString("mobilePhoneNumber") + "（" + strPhoneVerified + "）";
-            strXjc = String.format("%.0f", currUser.getDouble("xjc"));
+            strXjc = String.format("%.0f", currUser.getDouble("xjc")) + " 元";
             strTicket = String.format("%.0f", currUser.getDouble("ticket")) + " 张";
+            strInviteNum = String.format("%.0f", currUser.getDouble("inviteNum")) + " 人";
         }
 
         mPhoneField.setText(strPhone);
         mStatusField.setText(strStatus);
         mXjcField.setText(strXjc);
         mTicketField.setText(strTicket);
+        mInviteField.setText(strInviteNum);
     }
 }

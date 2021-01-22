@@ -178,6 +178,7 @@ public class User {
             currUser.increment("ticket", 0.0);
             currUser.increment("report", 0);
             currUser.increment("rank", 0);
+            currUser.increment("inviteNum", 0);
             save();
         }
     }

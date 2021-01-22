@@ -182,7 +182,8 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 Button reportButton = (Button) holder.getView(R.id.btn_report);
 
                 tradeDetails.setText(item.getDetails());
-                userName.setText(item.getUserName());
+//                userName.setText(item.getUserName());
+                userName.setText("区块链优质资源聚合平台");
                 tradeAge.setText(item.getAge());
 
                 // 投票
@@ -247,10 +248,10 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                 }
 
                 // 用户头像
-                String photoUrl = item.getUserImageThumbnailUrlSmall(mContext);
-                if (photoUrl != null) {
-                    ImageLoader.getInstance().displayImage(photoUrl, tradeUserPhoto);
-                }
+//                String photoUrl = item.getUserImageThumbnailUrlSmall(mContext);
+//                if (photoUrl != null) {
+//                    ImageLoader.getInstance().displayImage(photoUrl, tradeUserPhoto);
+//                }
 
                 // 消息图片
                 int count = item.getImageCount();

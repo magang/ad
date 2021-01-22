@@ -21,7 +21,7 @@
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:src="@mipmap/default_useravatar"
+            android:src="@mipmap/bitcoin_yellow"
             app:border_width="0dp"
             app:border_color="#FF000000"/>
 
