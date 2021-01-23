@@ -32,8 +32,11 @@ public class AccountFragment extends BaseFragment {
     @BindView(R.id.tv_ticket_value)
     TextView mTicketField;
 
-    @BindView(R.id.tv_invite_value)
-    TextView mInviteField;
+    @BindView(R.id.tv_inviteNum_value)
+    TextView mInviteNumField;
+
+    @BindView(R.id.tv_inviteCode_value)
+    TextView mInviteCodeField;
 
     private PushConfig mPush;
     private AVUser currUser;
@@ -68,6 +71,7 @@ public class AccountFragment extends BaseFragment {
         String strTicket = "";
         String strPhoneVerified = "";
         String strInviteNum = "";
+        String strInviteCode = "";
 
         currUser = AVUser.getCurrentUser();
         if (currUser != null) {
@@ -112,12 +116,14 @@ public class AccountFragment extends BaseFragment {
             strXjc = String.format("%.0f", currUser.getDouble("xjc")) + " 元";
             strTicket = String.format("%.0f", currUser.getDouble("ticket")) + " 张";
             strInviteNum = String.format("%.0f", currUser.getDouble("inviteNum")) + " 人";
+            strInviteCode = currUser.getString("inviteCode");
         }
 
         mPhoneField.setText(strPhone);
         mStatusField.setText(strStatus);
         mXjcField.setText(strXjc);
         mTicketField.setText(strTicket);
-        mInviteField.setText(strInviteNum);
+        mInviteNumField.setText(strInviteNum);
+        mInviteCodeField.setText(strInviteCode);
     }
 }
