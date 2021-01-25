@@ -1,5 +1,9 @@
 package com.chanlin.ad.util;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -61,5 +65,14 @@ public class CommonUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static void copyContentToClipboard(String content, Context context) {
+        //获取剪贴板管理器：
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        // 创建普通字符型ClipData
+        ClipData mClipData = ClipData.newPlainText("Label", content);
+        // 将ClipData内容放到系统剪贴板里。
+        cm.setPrimaryClip(mClipData);
     }
 }

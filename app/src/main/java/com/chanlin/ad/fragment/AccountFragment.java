@@ -3,11 +3,13 @@ package com.chanlin.ad.fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chanlin.ad.R;
 import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.config.PushConfig;
 import com.chanlin.ad.data.User;
+import com.chanlin.ad.util.CommonUtils;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
 
 import butterknife.BindView;
@@ -37,6 +39,9 @@ public class AccountFragment extends BaseFragment {
 
     @BindView(R.id.tv_inviteCode_value)
     TextView mInviteCodeField;
+
+    @BindView(R.id.tv_inviteLink_value)
+    TextView mInviteLinkField;
 
     private PushConfig mPush;
     private AVUser currUser;
@@ -75,7 +80,6 @@ public class AccountFragment extends BaseFragment {
 
         currUser = AVUser.getCurrentUser();
         if (currUser != null) {
-
             if (currUser.getBoolean("mobilePhoneVerified")) {
                 strPhoneVerified = "已验证";
             } else {
@@ -125,5 +129,21 @@ public class AccountFragment extends BaseFragment {
         mTicketField.setText(strTicket);
         mInviteNumField.setText(strInviteNum);
         mInviteCodeField.setText(strInviteCode);
+        mInviteLinkField.setText("点击复制");
+
+        mInviteCodeField.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                CommonUtils.copyContentToClipboard(mInviteCodeField.getText().toString(), getActivity());
+                Toast.makeText(getActivity(), "已复制到粘贴板", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mInviteLinkField.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String inviteText = "『寻街APP』优质资源聚合平台。安卓版本下载：http://d.firim.top/xunjie";
+                CommonUtils.copyContentToClipboard(inviteText, getActivity());
+                Toast.makeText(getActivity(), "已复制到粘贴板", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

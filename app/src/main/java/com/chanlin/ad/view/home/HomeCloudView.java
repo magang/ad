@@ -136,7 +136,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
     }
 
     private void initTopBar() {
-        mTopBar.setTitle("首页");
+        mTopBar.setTitle("消息");
 
 //        mTopBar.addRightImageButton(R.mipmap.icon_topbar_about, R.id.topbar_right_about_button).setOnClickListener(new OnClickListener() {
 //            @Override
@@ -183,7 +183,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
 
                 tradeDetails.setText(item.getDetails());
 //                userName.setText(item.getUserName());
-                userName.setText("区块链优质资源聚合平台");
+                userName.setText("优质资源聚合平台");
                 tradeAge.setText(item.getAge());
 
                 // 投票
