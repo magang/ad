@@ -358,7 +358,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                         User.syncUser();
 
                         int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
-                        final String[] items = new String[]{"1 票", "2 票", "5 票", "10 票"};
+                        final String[] items = new String[]{"1 票", "2 票", "3 票"};
                         new QMUIDialog.MenuDialogBuilder(mContext)
                                 .setSkinManager(QMUISkinManager.defaultInstance(getContext()))
                                 .addItems(items, new DialogInterface.OnClickListener() {
@@ -373,10 +373,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
                                                 mVote = "2";
                                                 break;
                                             case 2:
-                                                mVote = "5";
-                                                break;
-                                            case 3:
-                                                mVote = "10";
+                                                mVote = "3";
                                                 break;
                                             default:
                                                 break;
