@@ -67,6 +67,20 @@
                 app:met_maxCharacters="30"
                 app:met_singleLineEllipsis="true"/>
 
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/register_invitor_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/register_invitor_code_label"
+                android:text=""
+                android:textCursorDrawable="@drawable/text_cursor_cyan"
+                app:met_floatingLabel="highlight"
+                app:met_baseColor="#0056d3"
+                app:met_primaryColor="#982360"
+                app:met_errorColor="#ddaa00"
+                app:met_maxCharacters="30"
+                app:met_singleLineEllipsis="true" />
+
         </LinearLayout>
 
         <com.chanlin.ad.view.button.CircularProgressButton

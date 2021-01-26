@@ -54,6 +54,7 @@
     <string name="register_phone_label">手机号码</string>
     <string name="register_password_label">密码</string>
     <string name="register_password_confirm_label">密码确认</string>
+    <string name="register_invitor_code_label">邀请码</string>
     <string name="register_yzm_label">验证码</string>
     <string name="register_referrer_label">推荐人手机号码（已注册用户）</string>
     <string name="register_submit_label">注册</string>

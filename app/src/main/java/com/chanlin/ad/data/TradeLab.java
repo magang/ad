@@ -236,8 +236,6 @@ public class TradeLab {
         AVQuery<Trade> query = AVQuery.getQuery(Trade.TRADE_CLASS);
         query.whereEqualTo("status", "on");
         query.whereEqualTo("type", "trade");
-
-
         query.whereEqualTo("online", "online");
         query.whereGreaterThanOrEqualTo("createdAt", CommonUtils.getDateWithDateString(CommonUtils.formatDate(new Date())));
         query.orderByAscending("createdAt");

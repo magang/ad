@@ -38,11 +38,15 @@ public class RegisterFragment extends BaseFragment {
     @BindView(R.id.register_password_confirm)
     EditText mPasswordConfirmField;
 
+    @BindView(R.id.register_invitor_code)
+    EditText mInvitorCodeField;
+
     @BindView(R.id.register_submit)
     CircularProgressButton mSubmitButton;
 
     private String mPassword;
     private String mPasswordConfirm;
+    private String mInviteCode;
     private String mPhone;
     private String mStatus = "on";
     private String mTag = "";
@@ -109,6 +113,18 @@ public class RegisterFragment extends BaseFragment {
             }
         });
 
+        mInvitorCodeField.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence c, int start, int before, int count) {
+                mInviteCode = c.toString();
+            }
+
+            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
+            }
+
+            public void afterTextChanged(Editable c) {
+            }
+        });
+
         mSubmitButton.setIndeterminateProgressMode(true);
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -127,6 +143,10 @@ public class RegisterFragment extends BaseFragment {
                     Toast.makeText(getActivity(), "密码确认不能多于30个字符！", Toast.LENGTH_SHORT).show();
                 } else if (!mPasswordConfirm.equals(mPassword)) {
                     Toast.makeText(getActivity(), "两次输入的密码不一致！", Toast.LENGTH_SHORT).show();
+                } else if (mInviteCode == null || mInviteCode.equals("")) {
+                    Toast.makeText(getActivity(), "邀请码不能为空！", Toast.LENGTH_SHORT).show();
+                } else if (mInviteCode.length() != 6) {
+                    Toast.makeText(getActivity(), "邀请码是6位数字！", Toast.LENGTH_SHORT).show();
                 } else {
 
                     AVUser mUser = new AVUser();
@@ -135,6 +155,7 @@ public class RegisterFragment extends BaseFragment {
                     mUser.setMobilePhoneNumber(mPhone.trim());
                     mUser.put("status", mStatus);
                     mUser.put("tag", mTag);
+                    mUser.put("invitor", mInviteCode);
 
                     mProgressDialog =
                             ProgressDialog.show(getActivity(), "", "正在注册，请稍候...", true);
