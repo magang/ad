@@ -183,7 +183,7 @@ public class HomeCloudView extends QMUIWindowInsetLayout {
 
                 tradeDetails.setText(item.getDetails());
 //                userName.setText(item.getUserName());
-                userName.setText("优质资源聚合平台");
+                userName.setText("优质资源发布平台");
                 tradeAge.setText(item.getAge());
 
                 // 投票

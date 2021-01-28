@@ -152,7 +152,7 @@ public class TradeLab {
             case 4:
             case 5:
             case 6:
-                // 从最近发布的消息中，随机选择消息
+                // 从最近更新的消息中，随机选择消息
                 mTrades = findLatestTrades(100, 1, tradesStartDate);
                 break;
             default:
@@ -179,8 +179,8 @@ public class TradeLab {
         query.whereEqualTo("type", "trade");
         query.whereEqualTo("online", "online");
         query.whereEqualTo("user", "15539509926");
-        query.whereGreaterThanOrEqualTo("createdAt", CommonUtils.getDateWithDateString(startDate));
-        query.orderByDescending("createdAt");
+        query.whereGreaterThanOrEqualTo("updatedAt", CommonUtils.getDateWithDateString(startDate));
+        query.orderByDescending("updatedAt");
         query.limit(poolSize);
 
         return getRandomItems(query, num);
@@ -194,7 +194,7 @@ public class TradeLab {
         query.whereEqualTo("type", "trade");
         query.whereEqualTo("online", "online");
         query.whereEqualTo("user", "15539509926");
-        query.whereGreaterThanOrEqualTo("createdAt", CommonUtils.getDateWithDateString(startDate));
+        query.whereGreaterThanOrEqualTo("updatedAt", CommonUtils.getDateWithDateString(startDate));
         query.addDescendingOrder("totalVotes");
         query.limit(poolSize);
 
