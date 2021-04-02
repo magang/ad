@@ -1,5 +1,7 @@
 package com.chanlin.ad.fragment;
 
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -10,13 +12,22 @@ import com.chanlin.ad.base.BaseFragment;
 import com.chanlin.ad.config.PushConfig;
 import com.chanlin.ad.data.User;
 import com.chanlin.ad.util.CommonUtils;
+import com.qmuiteam.qmui.skin.QMUISkinManager;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.leancloud.AVObject;
+import cn.leancloud.AVRelation;
 import cn.leancloud.AVUser;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class AccountFragment extends BaseFragment {
     public static final String TAG = AccountFragment.class.getName();
@@ -32,6 +43,9 @@ public class AccountFragment extends BaseFragment {
 
     @BindView(R.id.tv_xjc_value)
     TextView mXjcField;
+
+    @BindView(R.id.tv_withdrawAddress_value)
+    TextView mWithdrawAddressField;
 
     @BindView(R.id.tv_ticket_value)
     TextView mTicketField;
@@ -79,6 +93,7 @@ public class AccountFragment extends BaseFragment {
         String strPhoneVerified = "";
         String strInviteNum = "";
         String strInviteCode = "";
+        String strWithdrawAddress = "";
 
         currUser = AVUser.getCurrentUser();
         if (currUser != null) {
@@ -119,15 +134,17 @@ public class AccountFragment extends BaseFragment {
             }
 
             strPhone = currUser.getString("mobilePhoneNumber") + "（" + strPhoneVerified + "）";
-            strXjc = String.format("%.0f", currUser.getDouble("xjc")) + " 元";
+            strXjc = String.format("%.0f", currUser.getDouble("xjc")) + "（点击提取）";
             strTicket = String.format("%.0f", currUser.getDouble("ticket")) + " 张";
             strInviteNum = String.format("%.0f", currUser.getDouble("inviteNum")) + " 人";
             strInviteCode = currUser.getString("inviteCode");
+            strWithdrawAddress = currUser.getString("adcAddress");
         }
 
         mPhoneField.setText(strPhone);
         mStatusField.setText(strStatus);
         mXjcField.setText(strXjc);
+        mWithdrawAddressField.setText(strWithdrawAddress);
         mTicketField.setText(strTicket);
         mInviteNumField.setText(strInviteNum);
         if (!StringUtils.isEmpty(strInviteCode)) {
@@ -160,5 +177,98 @@ public class AccountFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "已复制到粘贴板", Toast.LENGTH_SHORT).show();
             }
         });
+
+        mXjcField.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(getActivity());
+                builder.setTitle("提取ADC")
+                        .setSkinManager(QMUISkinManager.defaultInstance(getContext()))
+                        .setPlaceholder("提取数量")
+                        .setInputType(InputType.TYPE_CLASS_NUMBER)
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String mWithdrawCount = builder.getEditText().getText().toString();
+                                AVUser currUser = AVUser.getCurrentUser();
+                                String mWithdrawTo = "";
+                                if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
+                                    mWithdrawTo = currUser.getString("adcAddress");
+                                }
+
+                                if (StringUtils.isBlank(mWithdrawTo)) {
+                                    Toast.makeText(getActivity(), "提取地址为空，请联系管理员添加！", Toast.LENGTH_SHORT).show();
+                                } else if (StringUtils.isBlank(mWithdrawCount)) {
+                                    Toast.makeText(getActivity(), "提取数量不能为空！", Toast.LENGTH_SHORT).show();
+                                } else if (!isInteger(mWithdrawCount)) {
+                                    Toast.makeText(getActivity(), "提取数量必须是整数！", Toast.LENGTH_SHORT).show();
+                                } else if (Double.parseDouble(mWithdrawCount) <= 0) {
+                                    Toast.makeText(getActivity(), "提取数量不能为零！", Toast.LENGTH_SHORT).show();
+                                } else if (Double.parseDouble(mWithdrawCount) > currUser.getDouble("xjc")) {
+                                    Toast.makeText(getActivity(), "ADC不足！", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    dialog.dismiss();
+                                    String mLocal = "null";
+                                    String mLocalName = "";
+
+                                    final AVObject withdraw = new AVObject("AdcWithdraw");
+                                    withdraw.put("status", "submit");
+                                    withdraw.put("to", mWithdrawTo);
+                                    withdraw.put("count", Double.parseDouble(mWithdrawCount));
+
+                                    if (currUser != null && currUser.getBoolean("mobilePhoneVerified")) {
+                                        mLocal = currUser.getString("mobilePhoneNumber");
+                                        mLocalName = currUser.getString("nickname");
+                                    }
+
+                                    withdraw.put("from", mLocal.trim());
+                                    withdraw.put("fromName", mLocalName);
+
+                                    AVRelation<AVObject> xjcWithdrawRelationToUser = withdraw.getRelation("userRelation");
+                                    xjcWithdrawRelationToUser.add(currUser);
+
+                                    withdraw.saveInBackground().subscribe(new Observer<AVObject>() {
+                                        public void onSubscribe(Disposable disposable) {}
+                                        public void onNext(AVObject todo) {
+                                            // 成功保存之后，执行其他逻辑
+                                            Log.d(TAG, "ADC withdraw successfully.");
+                                            Toast.makeText(getActivity(), "已提交提取申请！", Toast.LENGTH_SHORT).show();
+                                        }
+                                        public void onError(Throwable throwable) {
+                                            // 异常处理
+                                            Log.e(TAG, "ADC withdraw failed: " + throwable.getMessage());
+                                        }
+                                        public void onComplete() {}
+                                    });
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        });
+    }
+
+    //判断整数（int）
+    private boolean isInteger(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
+    //判断浮点数（double和float）
+    private boolean isDouble(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[-\\+]?[.\\d]*$");
+        return pattern.matcher(str).matches();
     }
 }

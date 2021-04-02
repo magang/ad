@@ -97,49 +97,6 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/re_xjc"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/btn_list_item_bg"
-            android:clickable="false" >
-
-            <TextView
-                android:id="@+id/tv_xjc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:text="代金券"
-                android:textColor="#353535"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_xjc_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:layout_toRightOf="@id/tv_xjc"
-                android:ellipsize="end"
-                android:gravity="right"
-                android:singleLine="true"
-                android:text="0"
-                android:textColor="#AAAAAA"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:background="#dadada" />
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/re_ticket"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -182,6 +139,94 @@
                 android:layout_marginRight="12dp"
                 android:background="#dadada" />
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/re_xjc"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/btn_list_item_bg"
+            android:clickable="false" >
+
+            <TextView
+                android:id="@+id/tv_xjc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:text="ADC"
+                android:textColor="#353535"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_xjc_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@id/tv_xjc"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="0"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="#dadada" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/re_withdrawAddress"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/btn_list_item_bg"
+            android:clickable="false" >
+
+            <TextView
+                android:id="@+id/tv_withdrawAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:text="提取地址"
+                android:textColor="#353535"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_withdrawAddress_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@id/tv_withdrawAddress"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="0"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="#dadada" />
+        </RelativeLayout>
+
+
 
         <RelativeLayout
             android:id="@+id/re_inviteCode"
