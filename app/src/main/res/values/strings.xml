@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">寻街</string>
+    <string name="app_name">注意力银行</string>
 
     <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
@@ -51,10 +51,10 @@
     <string name="vote_num_label">投票数量</string>
     <string name="vote_submit_label">投票</string>
 
-    <string name="register_phone_label">手机号码</string>
-    <string name="register_password_label">密码</string>
-    <string name="register_password_confirm_label">密码确认</string>
-    <string name="register_invitor_code_label">邀请码</string>
+    <string name="register_phone_label">手机号码（必填）</string>
+    <string name="register_password_label">密码（必填）</string>
+    <string name="register_password_confirm_label">密码确认（必填）</string>
+    <string name="register_invitor_code_label">邀请码（可选）</string>
     <string name="register_yzm_label">验证码</string>
     <string name="register_referrer_label">推荐人手机号码（已注册用户）</string>
     <string name="register_submit_label">注册</string>

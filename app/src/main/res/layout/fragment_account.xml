@@ -97,10 +97,52 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/re_zhifubao"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/btn_list_item_bg"
+            android:clickable="false" >
+
+            <TextView
+                android:id="@+id/tv_zhifubao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:text="支付宝账号"
+                android:textColor="#353535"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_zhifubao_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@id/tv_zhifubao"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#AAAAAA"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="#dadada" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/re_ticket"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/btn_list_item_bg"
             android:clickable="false"
             android:visibility="visible">
@@ -232,7 +274,7 @@
             android:id="@+id/re_inviteCode"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/btn_list_item_bg"
             android:clickable="false"
             android:visibility="visible">

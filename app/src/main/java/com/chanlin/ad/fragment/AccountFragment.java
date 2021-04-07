@@ -59,6 +59,9 @@ public class AccountFragment extends BaseFragment {
     @BindView(R.id.tv_inviteLink_value)
     TextView mInviteLinkField;
 
+    @BindView(R.id.tv_zhifubao_value)
+    TextView mZhifubaoField;
+
     private PushConfig mPush;
     private AVUser currUser;
 
@@ -94,6 +97,7 @@ public class AccountFragment extends BaseFragment {
         String strInviteNum = "";
         String strInviteCode = "";
         String strWithdrawAddress = "";
+        String strZhifubao = "";
 
         currUser = AVUser.getCurrentUser();
         if (currUser != null) {
@@ -139,10 +143,12 @@ public class AccountFragment extends BaseFragment {
             strInviteNum = String.format("%.0f", currUser.getDouble("inviteNum")) + " 人";
             strInviteCode = currUser.getString("inviteCode");
             strWithdrawAddress = currUser.getString("adcAddress");
+            strZhifubao = currUser.getString("zhifubao");
         }
 
         mPhoneField.setText(strPhone);
         mStatusField.setText(strStatus);
+        mZhifubaoField.setText(strZhifubao);
         mXjcField.setText(strXjc);
         mWithdrawAddressField.setText(strWithdrawAddress);
         mTicketField.setText(strTicket);
@@ -171,7 +177,7 @@ public class AccountFragment extends BaseFragment {
                 } catch (Exception e) {
                     ;
                 }
-                String inviteText = "〔寻街APP〕优质资源发布平台。用户可对APP上发布的消息进行投票，每投一票，可获得一元代金券。代金券可用于在APP上团购商品。每个用户每天可免费获得10张投票券，每邀请一名新用户，每天可以额外获得10张投票券。可以在APP上我的账户中复制自己的邀请链接，并发送给朋友们。安卓版本下载：http://d.firim.top/xunjie"
+                String inviteText = "〔注意力银行〕优质资源发布平台。用户可对APP上发布的消息进行投票，每投一票，可获得一枚ADC。ADC是注意力银行APP中的广告代币，用于支付在APP上发布广告的费用。每个用户每天可免费获得一定数量的投票券，每邀请一名新用户，每天可以额外获得1倍的免费投票券。可以在APP上我的账户中复制自己的邀请链接，并发送给朋友们。安卓版本下载：http://d.firim.top/xunjie"
                         + " 注册账号时请填写邀请码: " + inviteCode;
                 CommonUtils.copyContentToClipboard(inviteText, getActivity());
                 Toast.makeText(getActivity(), "已复制到粘贴板", Toast.LENGTH_SHORT).show();
@@ -204,6 +210,8 @@ public class AccountFragment extends BaseFragment {
 
                                 if (StringUtils.isBlank(mWithdrawTo)) {
                                     Toast.makeText(getActivity(), "提取地址为空，请联系管理员添加！", Toast.LENGTH_SHORT).show();
+                                } else if (!User.isMemberUser()) {
+                                    Toast.makeText(getActivity(), "只有会员才能提币，请联系管理员添加会员！", Toast.LENGTH_SHORT).show();
                                 } else if (StringUtils.isBlank(mWithdrawCount)) {
                                     Toast.makeText(getActivity(), "提取数量不能为空！", Toast.LENGTH_SHORT).show();
                                 } else if (!isInteger(mWithdrawCount)) {
